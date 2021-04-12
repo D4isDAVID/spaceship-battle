@@ -1,2 +1,2 @@
 # Spaceship-Battle
-Multiplayer game made with Python (PyGame+Socket)
+Multiplayer game made with Python (PyGame)
