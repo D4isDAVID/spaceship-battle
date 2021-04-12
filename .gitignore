@@ -1,0 +1,3 @@
+venv/
+client/__pycache__/
+server/__pycache__/
