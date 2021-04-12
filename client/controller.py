@@ -9,7 +9,7 @@ class Controller:
         keys = pygame.key.get_pressed()
 
         data = ''
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_LSHIFT]:
             data += 'acc'
         if keys[pygame.K_UP]:
             data += 'up'

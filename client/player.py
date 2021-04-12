@@ -12,7 +12,7 @@ class Player:
         self.width = width
         self.height = height
         self.color = color
-        self.velocity = 3
+        self.velocity = 1
     
     def drawentity(self, surface):
         rect = (self.x, self.y, self.width, self.height)

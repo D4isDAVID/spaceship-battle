@@ -5,7 +5,7 @@ from player import Player
 
 
 class Network:
-    PLAYERS = 4
+    PLAYERS = 6
 
     def __init__(self):
         self.address = ('localhost', 7723)
@@ -13,7 +13,7 @@ class Network:
     
     def client_thread(self, client, player_id):
         # temporary color cause lazy woohoo
-        c = ((len(self.players)%4)+1) * 63
+        c = ((len(self.players)%self.PLAYERS)+1) * 63
         client.sendall(str(player_id).encode('utf-8'))
 
         while True:
@@ -35,46 +35,44 @@ class Network:
                 elif data['type'] == 'post':
                     try:
                         if isinstance(data['value'], str):
+                            velocity = player.velocity
                             if 'acc' in data['value']:
-                                player.velocity *= 2
+                                velocity += velocity/2
                             if 'up' in data['value']:
-                                player.y -= player.velocity
+                                player.y -= velocity
                             if 'left' in data['value']:
-                                player.x -= player.velocity
+                                player.x -= velocity
                             if 'down' in data['value']:
-                                player.y += player.velocity
+                                player.y += velocity
                             if 'right' in data['value']:
-                                player.x += player.velocity
-                            player.velocity /= self.players[player_id].velocity
+                                player.x += velocity
                         else:
                             player = data['value']
                         if player.y < 0:
                             player.y = 0
-                        elif player.y > 720:
-                            player.y = 720
+                        elif player.y+player.height > 720:
+                            player.y = 720-player.height
                         if player.x < 0:
                             player.x = 0
-                        elif player.x > 1280:
-                            player.x = 1280
-                        self.players[player_id] = player
+                        elif player.x+player.width > 1280:
+                            player.x = 1280-player.width
                     except:
                         pass
                 elif data['type'] == 'auth':
+                    # another lazy woohoo
                     another_one_has_it = 0
                     done = 0
-                    new_name = ''
+                    new_name = data['value']
 
-                    while done >= 1:
+                    while done < 1:
                         for player in self.players:
-                            if data['value'] == player.name:
-                                ++another_one_has_it
-                                --done
-                        ++done
+                            if new_name == self.players[player].name:
+                                another_one_has_it += 1
+                                new_name = data['value']
+                                new_name = f"{new_name} ({another_one_has_it})"
+                                done -= 1
+                        done += 1
                     
-                    if another_one_has_it > 0:
-                        new_name = f"{data['value']} ({another_one_has_it})"
-                    else:
-                        new_name = data['value']
                     client.sendall(new_name.encode('utf-8'))
                     self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
                     print(f"[SENT] {new_name}")
@@ -102,7 +100,8 @@ class Network:
         while True:
             c, addr = server.accept()
             print(f"[CONNECTION] {addr[0]}:{addr[1]}")
-            if len(list(self.players.values())) > self.PLAYERS:
+            if len(list(self.players.values())) > self.PLAYERS-1:
+                c.sendall(">>> TOO MANY PLAYERS <<<".encode())
                 c.close()
             else:
                 t = Thread(target=self.client_thread, args=(c, player_count))

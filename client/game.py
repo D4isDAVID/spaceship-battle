@@ -1,6 +1,7 @@
 import pygame
 from network import Network
 from controller import Controller
+from time import sleep
 
 
 class Game:
@@ -20,6 +21,11 @@ class Game:
         running = True
         clock = pygame.time.Clock()
         client = Network(input("Enter Server IP: "))
+        while not client.id:
+            if client.id != None:
+                break
+            print(str(client.id))
+            client = Network(input("Enter Server IP: "))
         self.name = client.auth(input("Enter Desired Name: "))
         controller = Controller(client)
 
