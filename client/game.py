@@ -39,8 +39,11 @@ class Game:
         while running:
             clock.tick(60)
 
-            controller.move()
-            self.players = client.get()
+            move_data = controller.move()
+            if move_data == '':
+                self.players = client.get()
+            else:
+                self.players = client.post(move_data)
 
             self.draw()
             pygame.display.update()
