@@ -58,18 +58,22 @@ class Network:
                     done = 0
                     new_name = data['auth']
 
-                    while done < 1:
-                        for player in self.players:
-                            if new_name == self.players[player].name:
-                                has_it += 1
-                                new_name = data['auth']
-                                new_name = f"{new_name} ({has_it})"
-                                done -= 1
-                        done += 1
-                    
-                    reply = dumps([new_name])
-                    self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
-                    print(f"[JOINED] Player {player_id} - {new_name}")
+                    if new_name == '':
+                        reply = [None]
+                    else:
+                        while done < 1:
+                            for player in self.players:
+                                if new_name == self.players[player].name:
+                                    has_it += 1
+                                    new_name = data['auth']
+                                    new_name = f"{new_name} ({has_it})"
+                                    done -= 1
+                            done += 1
+                        
+                        reply = [new_name]
+                        self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
+                        print(f"[JOINED] Player {player_id} - {new_name}")
+                    reply = dumps(reply)
                 client.sendall(reply)
             except Exception as e:
                 if str(e) != 'Ran out of input':

@@ -33,6 +33,8 @@ class Game:
         while client.id == None:
             client = Network(input("Enter Server IP: "))
         self.name = client.auth(input("Enter Desired Name: "))
+        while self.name == None:
+            self.name = client.auth(input("Enter Desired Name: "))
         controller = Controller(client)
 
         while running:
