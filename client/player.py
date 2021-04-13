@@ -21,7 +21,7 @@ class Player:
     def text_on_head(self, surface, t):
         text = self.FONT.render(t, True, self.color)
         surface.blit(text, (self.x + self.width//2 - text.get_width()//2,
-                            50+self.y + self.height//2 - text.get_height()//2))
+                            self.y-50 + self.height//2 - text.get_height()//2))
     
     def draw(self, surface):
         self.drawentity(surface)
