@@ -1,7 +1,7 @@
 import threading
 from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
-from threading import Thread, Event
+from threading import Thread
 from player import Player
 
 
@@ -9,7 +9,6 @@ class Network:
     PLAYERS = 6
 
     def __init__(self):
-        self.running = False
         self.address = ('localhost', 7723)
         self.players = {}
     
@@ -97,10 +96,9 @@ class Network:
         server.listen(1)
         print("Listening to port", self.address[1])
 
-        self.running = True
         player_count = 0
 
-        while self.running:
+        while True:
             c, addr = server.accept()
             print(f"[CONNECTION] {addr[0]}:{addr[1]}")
             if len(list(self.players.values())) > self.PLAYERS-1:
