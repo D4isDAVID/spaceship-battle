@@ -11,13 +11,13 @@ class Controller:
         data = ''
         if keys[pygame.K_LSHIFT]:
             data += 'acc'
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_w]:
             data += 'up'
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             data += 'left'
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_s]:
             data += 'down'
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_d]:
             data += 'right'
         
         if data != '':

@@ -1,6 +1,7 @@
+import threading
 from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
-from threading import Thread
+from threading import Thread, Event
 from player import Player
 
 
@@ -77,7 +78,7 @@ class Network:
                     self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
                     print(f"[SENT] {new_name}")
             except Exception as e:
-                print('[EXCEPTION]', player_id, e)
+                print('[EXCEPTION]', player_id, str(e))
                 break
         
         self.players.pop(player_id)
@@ -90,7 +91,7 @@ class Network:
         try:
             server.bind(self.address)
         except OSError as e:
-            print('[EXCEPTION]', e)
+            print('[EXCEPTION]', str(e))
         
         server.listen(1)
         print("Listening to port", self.address[1])
@@ -105,6 +106,7 @@ class Network:
                 c.close()
             else:
                 t = Thread(target=self.client_thread, args=(c, player_count))
+                t.daemon = True
                 t.start()
                 player_count += 1
 
