@@ -15,17 +15,16 @@ class Game:
     def draw(self):
         self.window.fill(0)
         for player in self.players:
+            player.draw(self.window)
             if player.name == self.name:
-                player.drawentity(self.window)
-                point = (player.x+player.width//2, player.y-20)
+                point = (player.x+player.width//2, player.y-45)
                 size = 7
+                size = round(size*2/3)
                 arrow = (point,
-                         (point[0]-size*(2), point[1]-size*2),
-                         (point[0], point[1]-round(size*2/3)),
+                         (point[0]-size*2, point[1]-size*2),
+                         (point[0], point[1]-size),
                          (point[0]+size*2, point[1]-size*2))
                 pygame.draw.polygon(self.window, player.color, arrow)
-            else:
-                player.draw(self.window)
     
     def main(self):
         running = True

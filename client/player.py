@@ -14,15 +14,9 @@ class Player:
         self.color = color
         self.velocity = 1
     
-    def drawentity(self, surface):
+    def draw(self, surface):
         rect = (self.x, self.y, self.width, self.height)
         pygame.draw.rect(surface, self.color, rect)
-    
-    def text_on_head(self, surface, t):
-        text = self.FONT.render(t, True, self.color)
+        text = self.FONT.render(self.name, True, self.color)
         surface.blit(text, (self.x + self.width//2 - text.get_width()//2,
                             self.y-50 + self.height//2 - text.get_height()//2))
-    
-    def draw(self, surface):
-        self.drawentity(surface)
-        self.text_on_head(surface, self.name)
