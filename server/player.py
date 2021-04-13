@@ -8,8 +8,18 @@ class Player:
         self.color = color
         self.velocity = 5
     
+    def moving_in_two_directions(self, data):
+        if not ('up' in data and 'down' in data):
+            if not ('left' in data and 'right' in data):
+                if 'up' in data or 'down' in data:
+                    if 'left' in data or 'right' in data:
+                        return True
+        return False
+    
     def move(self, data):
         velocity = self.velocity
+        if self.moving_in_two_directions(data):
+            velocity = velocity*(5/6)
         if 'acc' in data:
             velocity += velocity/2
         if 'up' in data:
