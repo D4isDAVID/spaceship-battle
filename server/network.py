@@ -32,31 +32,14 @@ class Network:
                 if 'get' in data:
                     reply = dumps(list(self.players.values()))
                 elif 'post' in data:
-                    if isinstance(data['post'], str):
-                        velocity = player.velocity
-                        if 'acc' in data['post']:
-                            velocity += velocity/2
-                        if 'up' in data['post']:
-                            player.y -= velocity
-                        if 'left' in data['post']:
-                            player.x -= velocity
-                        if 'down' in data['post']:
-                            player.y += velocity
-                        if 'right' in data['post']:
-                            player.x += velocity
-                    if player.y < 0:
-                        player.y = 0
-                    elif player.y+player.height > 720:
-                        player.y = 720-player.height
-                    if player.x < 0:
-                        player.x = 0
-                    elif player.x+player.width > 1280:
-                        player.x = 1280-player.width
+                    if 'move' in data['post']:
+                        player.move(data['post']['move'])
                     reply = dumps(list(self.players.values()))
                 elif 'auth' in data:
+                    old_name = data['auth']
                     has_it = 0
                     done = 0
-                    new_name = data['auth']
+                    new_name = old_name
 
                     if new_name == '':
                         reply = [None]
@@ -65,7 +48,7 @@ class Network:
                             for player in self.players:
                                 if new_name == self.players[player].name:
                                     has_it += 1
-                                    new_name = data['auth']
+                                    new_name = old_name
                                     new_name = f"{new_name} ({has_it})"
                                     done -= 1
                             done += 1

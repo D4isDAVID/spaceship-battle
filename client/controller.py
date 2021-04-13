@@ -20,4 +20,6 @@ class Controller:
         if keys[pygame.K_d]:
             data += 'right'
         
-        return data
+        if data == '':
+            return {}
+        return {'move': data}
