@@ -32,7 +32,6 @@ class Network:
                 if 'get' in data:
                     reply = dumps(list(self.players.values()))
                 elif 'post' in data:
-                    print(f"GOT {data['post']}")
                     if isinstance(data['post'], str):
                         velocity = player.velocity
                         if 'acc' in data['post']:
