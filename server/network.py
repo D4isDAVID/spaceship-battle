@@ -9,6 +9,7 @@ class Network:
     PLAYERS = 6
 
     def __init__(self):
+        self.running = False
         self.address = ('localhost', 7723)
         self.players = {}
     
@@ -96,9 +97,10 @@ class Network:
         server.listen(1)
         print("Listening to port", self.address[1])
 
+        self.running = True
         player_count = 0
 
-        while True:
+        while self.running:
             c, addr = server.accept()
             print(f"[CONNECTION] {addr[0]}:{addr[1]}")
             if len(list(self.players.values())) > self.PLAYERS-1:
@@ -113,4 +115,9 @@ class Network:
 if __name__ == '__main__':
     server = Network()
     thread = Thread(target=server.listen_thread)
+    thread.daemon = True
     thread.start()
+    while True:
+        var = input()
+        if var == 'stop':
+            exit()
