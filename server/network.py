@@ -57,7 +57,6 @@ class Network:
                     except:
                         pass
                 elif data['type'] == 'auth':
-                    print(f"[JOINED] Player {player_id} - {data['value']}")
                     has_it = 0
                     done = 0
                     new_name = data['value']
@@ -73,12 +72,16 @@ class Network:
                     
                     client.sendall(new_name.encode('utf-8'))
                     self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
+                    print(f"[JOINED] Player {player_id} - {new_name}")
             except Exception as e:
                 if str(e) != 'Ran out of input':
                     print(f"[EXCEPTION] Player {player_id} - {e}")
                 break
         
-        self.players.pop(player_id)
+        try:
+            self.players.pop(player_id)
+        except:
+            print(f"Player {player_id} disconnected without joining the game")
         client.close()
         print(f"[DISCONNECTED] Player {player_id}")
 
