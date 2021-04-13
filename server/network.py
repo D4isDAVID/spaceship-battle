@@ -25,14 +25,11 @@ class Network:
                     pass
                 data = loads(client.recv(4096))
 
-                print(f"[RECIEVED] {data['type']} {data['value']}")
-
                 if not data:
                     break
 
                 if data['type'] == 'get':
                     client.sendall(dumps(list(self.players.values())))
-                    print(f"[SENT] {self.players}")
                 elif data['type'] == 'post':
                     try:
                         if isinstance(data['value'], str):
@@ -60,30 +57,30 @@ class Network:
                     except:
                         pass
                 elif data['type'] == 'auth':
-                    # another lazy woohoo
-                    another_one_has_it = 0
+                    print(f"[JOINED] Player {player_id} - {data['value']}")
+                    has_it = 0
                     done = 0
                     new_name = data['value']
 
                     while done < 1:
                         for player in self.players:
                             if new_name == self.players[player].name:
-                                another_one_has_it += 1
+                                has_it += 1
                                 new_name = data['value']
-                                new_name = f"{new_name} ({another_one_has_it})"
+                                new_name = f"{new_name} ({has_it})"
                                 done -= 1
                         done += 1
                     
                     client.sendall(new_name.encode('utf-8'))
                     self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
-                    print(f"[SENT] {new_name}")
             except Exception as e:
-                print('[EXCEPTION]', player_id, str(e))
+                if str(e) != 'Ran out of input':
+                    print(f"[EXCEPTION] Player {player_id} - {e}")
                 break
         
         self.players.pop(player_id)
         client.close()
-        print('[DISCONNECTED]', player_id)
+        print(f"[DISCONNECTED] Player {player_id}")
 
     def listen_thread(self):
         server = socket(AF_INET, SOCK_STREAM)
@@ -91,7 +88,7 @@ class Network:
         try:
             server.bind(self.address)
         except OSError as e:
-            print('[EXCEPTION]', str(e))
+            print(f"[EXCEPTION] {e}")
         
         server.listen(1)
         print("Listening to port", self.address[1])
