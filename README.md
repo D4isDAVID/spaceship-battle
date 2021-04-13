@@ -1,2 +1,2 @@
 # Spaceship-Battle
-epic
+Multiplayer game made with Python (PyGame)
