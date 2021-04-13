@@ -20,5 +20,4 @@ class Controller:
         if keys[pygame.K_d]:
             data += 'right'
         
-        if data != '':
-            self.network.post(data)
+        return data

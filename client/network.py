@@ -18,26 +18,21 @@ class Network:
             return int(self.socket.recv(1024).decode())
         except OSError as e:
             print('[EXCEPTION]', e)
+        
+    def send(self, type, data):
+        try:
+            request = {type: data}
+            self.socket.sendall(dumps(request))
+            return loads(self.socket.recv(2048))
+        except OSError as e:
+            print('[EXCEPTION]', e)
     
     def get(self):
-        try:
-            data = {'type': 'get', 'value': None}
-            self.socket.sendall(dumps(data))
-            return loads(self.socket.recv(4096))
-        except OSError as e:
-            print('[EXCEPTION]', e)
+        return self.send('get', None)
     
     def post(self, data):
-        try:
-            data = {'type': 'post', 'value': data}
-            self.socket.sendall(dumps(data))
-        except OSError as e:
-            print('[EXCEPTION]', e)
+        return self.send('post', data)
     
     def auth(self, data):
-        try:
-            data = {'type': 'auth', 'value': data}
-            self.socket.sendall(dumps(data))
-            return self.socket.recv(2048).decode()
-        except OSError as e:
-            print('[EXCEPTION]', e)
+        reply = self.send('auth', data)
+        return reply[0]

@@ -9,7 +9,7 @@ class Network:
     PLAYERS = 6
 
     def __init__(self):
-        self.address = ('localhost', 7723)
+        self.address = ('', 7723)
         self.players = {}
     
     def client_thread(self, client, player_id):
@@ -23,56 +23,55 @@ class Network:
                     player = self.players[player_id]
                 except:
                     pass
-                data = loads(client.recv(4096))
+                data = loads(client.recvfrom(2048)[0])
+                reply = None
 
                 if not data:
                     break
 
-                if data['type'] == 'get':
-                    client.sendall(dumps(list(self.players.values())))
-                elif data['type'] == 'post':
-                    try:
-                        if isinstance(data['value'], str):
-                            velocity = player.velocity
-                            if 'acc' in data['value']:
-                                velocity += velocity/2
-                            if 'up' in data['value']:
-                                player.y -= velocity
-                            if 'left' in data['value']:
-                                player.x -= velocity
-                            if 'down' in data['value']:
-                                player.y += velocity
-                            if 'right' in data['value']:
-                                player.x += velocity
-                        else:
-                            player = data['value']
-                        if player.y < 0:
-                            player.y = 0
-                        elif player.y+player.height > 720:
-                            player.y = 720-player.height
-                        if player.x < 0:
-                            player.x = 0
-                        elif player.x+player.width > 1280:
-                            player.x = 1280-player.width
-                    except:
-                        pass
-                elif data['type'] == 'auth':
+                if 'get' in data:
+                    reply = dumps(list(self.players.values()))
+                elif 'post' in data:
+                    print(f"GOT {data['post']}")
+                    if isinstance(data['post'], str):
+                        velocity = player.velocity
+                        if 'acc' in data['post']:
+                            velocity += velocity/2
+                        if 'up' in data['post']:
+                            player.y -= velocity
+                        if 'left' in data['post']:
+                            player.x -= velocity
+                        if 'down' in data['post']:
+                            player.y += velocity
+                        if 'right' in data['post']:
+                            player.x += velocity
+                    if player.y < 0:
+                        player.y = 0
+                    elif player.y+player.height > 720:
+                        player.y = 720-player.height
+                    if player.x < 0:
+                        player.x = 0
+                    elif player.x+player.width > 1280:
+                        player.x = 1280-player.width
+                    reply = dumps(list(self.players.values()))
+                elif 'auth' in data:
                     has_it = 0
                     done = 0
-                    new_name = data['value']
+                    new_name = data['auth']
 
                     while done < 1:
                         for player in self.players:
                             if new_name == self.players[player].name:
                                 has_it += 1
-                                new_name = data['value']
+                                new_name = data['auth']
                                 new_name = f"{new_name} ({has_it})"
                                 done -= 1
                         done += 1
                     
-                    client.sendall(new_name.encode('utf-8'))
+                    reply = dumps([new_name])
                     self.players[player_id] = Player(new_name, 640, 360, 50, 50, (c, 128, c))
                     print(f"[JOINED] Player {player_id} - {new_name}")
+                client.sendall(reply)
             except Exception as e:
                 if str(e) != 'Ran out of input':
                     print(f"[EXCEPTION] Player {player_id} - {e}")
