@@ -13,8 +13,7 @@ class Network:
         self.players = {}
     
     def client_thread(self, client, player_id):
-        # temporary color cause lazy woohoo
-        c = ((len(self.players)%self.PLAYERS)+1) * 63
+        c = ((len(self.players)%self.PLAYERS)+1) * (255//self.PLAYERS*(2/3))
         client.sendall(str(player_id).encode('utf-8'))
 
         while True:
