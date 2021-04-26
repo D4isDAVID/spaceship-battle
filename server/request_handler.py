@@ -1,12 +1,15 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from json import dumps, loads
 from threading import Thread
+from lobby import Lobby
+from event_handler import EventHandler
 
 
 class Server:
     def __init__(self):
+        self.event_handler = EventHandler(self)
         self.players = {}
-        self.lobbies = {}
+        self.lobbies = {0: Lobby()}
     
     def client_thread(self, client, player_id):
         try:
@@ -19,7 +22,7 @@ class Server:
                 if not events:
                     break
 
-                reply = events
+                reply = self.event_handler.handle_events(events, player_id)
                 client.sendall(dumps(reply).encode())
         except OSError as e:
             print(f"[EXCEPTION] {e}")
@@ -51,14 +54,3 @@ class Server:
             )
             thread.daemon = True
             thread.start()
-
-
-if __name__ == '__main__':
-    server = Server()
-    thread = Thread(target=server.listen_thread)
-    thread.daemon = True
-    thread.start()
-    while True:
-        command = input()
-        if command == 'stop':
-            exit()
