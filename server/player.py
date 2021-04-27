@@ -1,3 +1,3 @@
-class Player:
-    def __init__(self, entity):
-        self.entity = entity
+class ServerPlayer:
+    def __init__(self):
+        self.lobby_id = None

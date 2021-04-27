@@ -3,6 +3,7 @@ from json import dumps, loads
 from threading import Thread
 from lobby import Lobby
 from event_handler import EventHandler
+from player import ServerPlayer
 
 
 class Server:
@@ -47,7 +48,7 @@ class Server:
         while True:
             client, address = server.accept()
             print("[CONNECTION] From {address[0]}:{address[1]}")
-            self.players[player_count] = 'yeah' # Player()
+            self.players[player_count] = ServerPlayer()
             thread = Thread(
                 target=self.client_thread,
                 args=(client, player_count)

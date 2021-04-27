@@ -1,2 +1,0 @@
-class BulletEntity:
-    pass

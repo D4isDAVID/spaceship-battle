@@ -1,4 +1,5 @@
-from server.player import Player
+from lobby_objects.player import LobbyPlayer
+from lobby_objects.entities.player import PlayerEntity
 
 
 class EventHandler:
@@ -17,5 +18,23 @@ class EventHandler:
         return reply
     
     def handle_event(self, event, value, player_id):
-        # TODO: but only after finishing lobby.py and all entities
-        pass
+        lobby_id = self.server.player[player_id].lobby_id
+        
+        if lobby_id == None:
+            if event == 'join':
+                self.server.player[player_id].lobby_id = value[0]
+                lobby = self.server.lobbies[value[0]]
+                lobby.entities.append(PlayerEntity(value[1], )))
+                lobby.players[player_id] = LobbyPlayer(
+                    value[1],
+                    lobby.entities[-1]
+                )
+                return lobby.entities
+            return self.server.lobbies
+        lobby = self.server.lobbies[lobby_id]
+        player = lobby.players[player_id]
+        if event == 'move':
+            player.entity.move[value[0]] = value[1]
+        elif event == 'look':
+            player.angle = value
+        return lobby.entities
