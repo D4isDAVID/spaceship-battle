@@ -1,8 +1,7 @@
-from server.lobby_objects.entity import Entity
 import math
 
 
-class BulletEntity(Entity):
+class BulletEntity:
     def __init__(self, entity, angle):
         self.entity = entity
         self.x = self.entity.x - self.entity.width // 2
@@ -17,3 +16,9 @@ class BulletEntity(Entity):
     def update(self):
         self.x += self.velocity[0]
         self.y += self.velocity[1]
+    
+    def is_out_of_bounds(self):
+        if not (self.x < 0 or self.x + self.width > 5000):
+            if not (self.y < 0 or self.y + self.height > 5000):
+                return False
+        return True

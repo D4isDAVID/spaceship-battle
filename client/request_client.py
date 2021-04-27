@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
-from json import dumps, loads
+from pickle import dumps, loads
 from threading import Thread
 
 
@@ -18,7 +18,7 @@ class Client:
     
     def send(self, events):
         try:
-            self.socket.sendall(dumps(events).encode())
-            return loads(self.socket.recv(2048).decode())
+            self.socket.sendall(dumps(events))
+            return loads(self.socket.recv(2048))
         except OSError as e:
             print(f"[EXCEPTION] {e}")

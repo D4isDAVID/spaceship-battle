@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
-from json import dumps, loads
+from pickle import dumps, loads
 from threading import Thread
 from lobby import Lobby
 from event_handler import EventHandler
@@ -17,20 +17,28 @@ class Server:
             client.sendall(str(player_id).encode())
 
             while True:
-                data = client.recv(2048).decode()
-                events = loads(data)
+                data = client.recv(2048)
 
-                if not events:
+                if not data:
                     break
 
+                events = loads(data)
+
                 reply = self.event_handler.handle_events(events, player_id)
-                client.sendall(dumps(reply).encode())
+                client.sendall(dumps(reply))
         except OSError as e:
             print(f"[EXCEPTION] {e}")
         
+        lobby = self.lobbies[self.players[player_id].lobby_id]
+        lobby.entities.pop(lobby.players[player_id].entity_id)
+        lobby.players.pop(lobby.players)
         self.players.pop(player_id)
         client.close()
         print(f"[DISCONNECTED] Player {player_id}")
+    
+    def lobby_thread(self, lobby_id):
+        lobby = self.lobbies[lobby_id]
+        lobby.main()
     
     def listen_thread(self, port=7723):
         server = socket(AF_INET, SOCK_STREAM)
@@ -45,9 +53,12 @@ class Server:
         print("Server is online.")
 
         player_count = 0
+        lobby = Thread(target=self.lobby_thread, args=(0, ))
+        lobby.daemon = True
+        lobby.start()
         while True:
             client, address = server.accept()
-            print("[CONNECTION] From {address[0]}:{address[1]}")
+            print(f"[CONNECTION] From {address[0]}:{address[1]}")
             self.players[player_count] = ServerPlayer()
             thread = Thread(
                 target=self.client_thread,
@@ -55,3 +66,14 @@ class Server:
             )
             thread.daemon = True
             thread.start()
+        
+
+if __name__ == '__main__':
+    server = Server()
+    thread = Thread(target=server.listen_thread)
+    thread.daemon = True
+    thread.start()
+    while True:
+        command = input()
+        if command == 'stop':
+            quit()

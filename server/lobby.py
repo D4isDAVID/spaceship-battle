@@ -7,7 +7,7 @@ class Lobby:
 
     def __init__(self):
         self.players = {}
-        self.entities = []
+        self.entities = {}
     
     def update(self):
         for entity in self.entities:
@@ -15,6 +15,7 @@ class Lobby:
 
     def main(self):
         clock = Clock()
+        print('Lobby Running')
 
         while True:
             clock.tick(60)
