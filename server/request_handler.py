@@ -30,8 +30,7 @@ class Server:
             print(f"[EXCEPTION] {e}")
         
         lobby = self.lobbies[self.players[player_id].lobby_id]
-        lobby.entities.pop(lobby.players[player_id].entity_id)
-        lobby.players.pop(lobby.players)
+        lobby.entities.pop(self.players[player_id].entity_id)
         self.players.pop(player_id)
         client.close()
         print(f"[DISCONNECTED] Player {player_id}")

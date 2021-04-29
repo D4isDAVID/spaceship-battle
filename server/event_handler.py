@@ -1,5 +1,6 @@
 from player import ServerPlayer
-from lobby_objects.entity.player import PlayerEntity
+from entity.player import PlayerEntity
+from entity.bullet import BulletEntity
 
 
 class EventHandler:
@@ -24,17 +25,19 @@ class EventHandler:
             if event == 'join':
                 self.server.players[player_id].lobby_id = value[0]
                 lobby = self.server.lobbies[value[0]]
-                lobby.entities.append(PlayerEntity(
+                self.server.players[player_id].entity_id = lobby.entity_count
+                lobby.entities[lobby.entity_count] = PlayerEntity(
                     value[1],
-                    (255, 255, 255),
-                    player_id
-                ))
-                return lobby.players[player_id].entity_id
+                    (255, 255, 255)
+                )
+                lobby.entity_count += 1
+                return lobby.entity_count - 1
             return self.server.lobbies
         lobby = self.server.lobbies[lobby_id]
-        player = lobby.players[player_id]
+        player = lobby.entities[self.server.players[player_id].entity_id]
         if event == 'move':
-            lobby.entities[player.entity_id].move = value
-        elif event == 'look':
-            player.angle = value
+            player.move = value
+        elif event == 'shoot':
+            lobby.entities[lobby.entity_count] = BulletEntity(player, value)
+            lobby.entity_count += 1
         return lobby.entities

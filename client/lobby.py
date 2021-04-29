@@ -11,7 +11,7 @@ class Lobby:
     
     def draw(self, surface):
         surface.fill(0)
-        for entity in self.entities:
+        for entity in list(self.entities.values()):
             entity.draw(surface)
 
     def main(self, name, hostname, port=7723):
@@ -43,15 +43,15 @@ class Lobby:
                     elif event.key == pygame.K_d: self.move[3] = False
                     elif event.key == pygame.K_LSHIFT: self.move[4] = False
                     events['move'] = self.move
-                elif event.type == pygame.MOUSEMOTION:
-                    mouse_pos = pygame.mouse.get_pos()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
 
-                    vector = (
-                        mouse_pos[0] - self.entities[self.entity_id].x,
-                        mouse_pos[1] - self.entities[self.entity_id].y
-                    )
+                    pos = [
+                        pos[0]-self.entities[self.entity_id].x,
+                        pos[1]-self.entities[self.entity_id].y
+                    ]
 
-                    events['look'] = math.atan2(vector[1], vector[0])
+                    events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180
 
             self.entities = client.send(events)
 
