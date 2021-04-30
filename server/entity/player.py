@@ -6,7 +6,7 @@ class PlayerEntity:
         self.y = 500
         self.width = 50
         self.height = 50
-        self.velocity = 5
+        self.velocity = 2
         self.move = [False, False, False, False, False]
     
     def update(self):

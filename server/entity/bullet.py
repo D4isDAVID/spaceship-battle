@@ -1,4 +1,5 @@
 import math
+from entity.player import PlayerEntity
 
 
 class BulletEntity:
@@ -8,11 +9,19 @@ class BulletEntity:
         self.y = self.entity.y + self.entity.height // 2
         self.width = 5
         self.height = 5
-        self.color = self.entity.color
+        self.color = (255, 255, 255)
         self.velocity = [
-            math.cos(angle / 180 * math.pi) * 5,
-            math.sin(angle / 180 * math.pi) * 5
+            math.cos(angle / 180 * math.pi) * 15,
+            math.sin(angle / 180 * math.pi) * 15
         ]
+    
+    def get_distance(self, other):
+        if isinstance(other, PlayerEntity):
+            if other != self.entity:
+                return math.sqrt(
+                    math.pow(self.x-other.x-other.width//2,2) + math.pow(self.y-other.y-other.height//2,2)
+                )
+        return -1
     
     def update(self):
         self.x += self.velocity[0]

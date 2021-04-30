@@ -1,3 +1,4 @@
+import pygame
 from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
 from threading import Thread
@@ -65,6 +66,7 @@ class Server:
             )
             thread.daemon = True
             thread.start()
+            player_count += 1
         
 
 if __name__ == '__main__':
@@ -75,4 +77,5 @@ if __name__ == '__main__':
     while True:
         command = input()
         if command == 'stop':
+            pygame.quit()
             quit()

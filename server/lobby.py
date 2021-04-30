@@ -15,10 +15,17 @@ class Lobby:
         ids = []
         for eid, entity in self.entities.items():
             entity.update()
-            if entity.is_out_of_bounds():
-                if isinstance(entity, BulletEntity):
-                    ids.append(eid)
-        if len(ids) > 0:
+            if isinstance(entity, BulletEntity):
+                for other in self.entities.values():
+                    d = entity.get_distance(other)
+                    if d != -1:
+                        print(d)
+                        if d < other.width//2:
+                            ids.append(eid)
+                if entity.is_out_of_bounds():
+                    if eid not in ids:
+                        ids.append(eid)
+        if ids:
             for eid in ids:
                 self.entities.pop(eid)
 
@@ -27,5 +34,5 @@ class Lobby:
         print('Lobby Running')
 
         while True:
-            clock.tick(60)
+            clock.tick(144)
             self.update()

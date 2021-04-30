@@ -28,7 +28,7 @@ class EventHandler:
                 self.server.players[player_id].entity_id = lobby.entity_count
                 lobby.entities[lobby.entity_count] = PlayerEntity(
                     value[1],
-                    (255, 255, 255)
+                    (150, 150, 150)
                 )
                 lobby.entity_count += 1
                 return lobby.entity_count - 1
