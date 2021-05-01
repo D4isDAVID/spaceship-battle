@@ -27,13 +27,7 @@ class PlayerEntity:
         return False
     
     def validate_position(self):
-        if self.y < 0: self.y = 0
+        if self.y - self.radius < 0: self.y = self.radius
         elif self.y + self.radius > 720: self.y = 720 - self.radius
-        if self.x < 0: self.x = 0
+        if self.x - self.radius < 0: self.x = self.radius
         elif self.x + self.radius > 1280: self.x = 1280 - self.radius
-    
-    def is_out_of_bounds(self):
-        if not (self.x < 0 or self.x + self.radius > 1280):
-            if not (self.y < 0 or self.y + self.radius > 720):
-                return False
-        return True
