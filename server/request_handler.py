@@ -74,6 +74,7 @@ if __name__ == '__main__':
     thread = Thread(target=server.listen_thread)
     thread.daemon = True
     thread.start()
+    print("Type 'stop' to stop the server.")
     while True:
         command = input()
         if command == 'stop':
