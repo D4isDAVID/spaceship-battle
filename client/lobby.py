@@ -47,8 +47,8 @@ class Lobby:
                     pos = pygame.mouse.get_pos()
 
                     pos = [
-                        pos[0]-self.entities[self.entity_id].x-self.entities[self.entity_id].width//2,
-                        pos[1]-self.entities[self.entity_id].y-self.entities[self.entity_id].height//2
+                        pos[0]-self.entities[self.entity_id].x,
+                        pos[1]-self.entities[self.entity_id].y
                     ]
 
                     events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180

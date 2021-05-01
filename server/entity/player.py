@@ -4,8 +4,7 @@ class PlayerEntity:
         self.color = color
         self.x = 500
         self.y = 500
-        self.width = 50
-        self.height = 50
+        self.radius = 25
         self.velocity = 2
         self.move = [False, False, False, False, False]
     
@@ -29,12 +28,12 @@ class PlayerEntity:
     
     def validate_position(self):
         if self.y < 0: self.y = 0
-        elif self.y + self.height > 720: self.y = 720 - self.height
+        elif self.y + self.radius > 720: self.y = 720 - self.radius
         if self.x < 0: self.x = 0
-        elif self.x + self.width > 1280: self.x = 1280 - self.width
+        elif self.x + self.radius > 1280: self.x = 1280 - self.radius
     
     def is_out_of_bounds(self):
-        if not (self.x < 0 or self.x + self.width > 1280):
-            if not (self.y < 0 or self.y + self.height > 720):
+        if not (self.x < 0 or self.x + self.radius > 1280):
+            if not (self.y < 0 or self.y + self.radius > 720):
                 return False
         return True

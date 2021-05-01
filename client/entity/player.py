@@ -3,13 +3,12 @@ pygame.font.init()
 
 
 class PlayerEntity:
-    FONT = pygame.font.SysFont('Arial', 30)
+    FONT = pygame.font.SysFont('Arial', 25)
 
     def draw(self, surface):
-        rect = (self.x, self.y, self.width, self.height)
-        pygame.draw.rect(surface, self.color, rect)
+        pygame.draw.circle(surface, self.color, (self.x, self.y), self.radius)
         text = self.FONT.render(self.name, True, self.color)
         surface.blit(text, (
-            self.x + self.width // 2 - text.get_width() // 2,
-            self.y - text.get_width() // 2-5
+            self.x - text.get_width() // 2,
+            self.y - self.radius - text.get_height() - 2
         ))

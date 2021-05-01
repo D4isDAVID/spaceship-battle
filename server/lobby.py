@@ -19,9 +19,9 @@ class Lobby:
                 for other in self.entities.values():
                     d = entity.get_distance(other)
                     if d != -1:
-                        print(d)
-                        if d < other.width//2:
-                            ids.append(eid)
+                        if d < 30:
+                            if eid not in ids:
+                                ids.append(eid)
                 if entity.is_out_of_bounds():
                     if eid not in ids:
                         ids.append(eid)
