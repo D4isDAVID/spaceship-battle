@@ -28,7 +28,7 @@ class Lobby:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
+                    break
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w: self.move[0] = True
                     elif event.key == pygame.K_a: self.move[1] = True
@@ -58,4 +58,6 @@ class Lobby:
 
 if __name__ == '__main__':
     lobby = Lobby()
-    lobby.main('Player', '127.0.0.1', 7723)
+    ip = input("Ented Server IP: ")
+    name = input("Enter Desired Name: ")
+    lobby.main(name, ip, 7723)

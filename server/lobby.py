@@ -19,7 +19,7 @@ class Lobby:
                 for other in self.entities.values():
                     d = entity.get_distance(other)
                     if d != -1:
-                        if d < 30:
+                        if d < entity.radius+other.radius:
                             if eid not in ids:
                                 ids.append(eid)
                 if entity.is_out_of_bounds():
