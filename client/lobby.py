@@ -58,6 +58,6 @@ class Lobby:
 
 if __name__ == '__main__':
     lobby = Lobby()
-    ip = input("Ented Server IP: ")
+    ip = input("Enter Server IP: ")
     name = input("Enter Desired Name: ")
     lobby.main(name, ip, 7723)
