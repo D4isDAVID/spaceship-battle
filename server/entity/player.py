@@ -1,22 +1,49 @@
+import random
+import time
+from threading import Thread
+
+
 class PlayerEntity:
     def __init__(self, name, color):
         self.name = name
         self.color = color
-        self.x = 500
-        self.y = 500
         self.radius = 25
         self.velocity = 2
         self.move = [False, False, False, False, False]
+        self.score = 0
+        self.x = -50
+        self.y = -50
+        self.alive = True
+        self.spawning = False
+    
+    def spawn_thread(self):
+        time.sleep(2.5)
+        self.alive = True
+        self.x = random.randint(0, 1280)
+        self.y = random.randint(0, 720)
+        self.spawning = False
+        print(self.x, self.y)
+    
+    def spawn(self):
+        self.spawning = True
+        thread = Thread(target=self.spawn_thread)
+        thread.daemon = True
+        thread.start()
     
     def update(self):
-        velocity = self.velocity
-        if self.move[4]: velocity *= 1.5
-        if self.is_moving_in_two_directions(): velocity *= (5/6)
-        if self.move[0]: self.y -= velocity
-        if self.move[1]: self.x -= velocity
-        if self.move[2]: self.y += velocity
-        if self.move[3]: self.x += velocity
-        self.validate_position()
+        if self.alive:
+            velocity = self.velocity
+            if self.move[4]: velocity *= 1.5
+            if self.is_moving_in_two_directions(): velocity *= (5/6)
+            if self.move[0]: self.y -= velocity
+            if self.move[1]: self.x -= velocity
+            if self.move[2]: self.y += velocity
+            if self.move[3]: self.x += velocity
+            self.validate_position()
+        else:
+            self.x = -50
+            self.y = -50
+            if self.spawning == False: self.spawn()
     
     def is_moving_in_two_directions(self):
         if not (self.move[0] and self.move[2]):

@@ -16,12 +16,21 @@ class Lobby:
         for eid, entity in self.entities.items():
             entity.update()
             if isinstance(entity, BulletEntity):
-                for other in self.entities.values():
-                    d = entity.get_distance(other)
-                    if d != -1:
-                        if d < entity.radius+other.radius:
-                            if eid not in ids:
-                                ids.append(eid)
+                for oid, other in self.entities.items():
+                    if entity != other:
+                        d = entity.get_distance(other)
+                        if d != -1:
+                            if d < entity.radius+other.radius:
+                                if eid not in ids:
+                                    ids.append(eid)
+                                if isinstance(other, PlayerEntity):
+                                    if other.alive == True:
+                                        other.alive = False
+                                        other.score -= 1
+                                        entity.entity.score += 1
+                                elif isinstance(other, BulletEntity):
+                                    if oid not in ids:
+                                        ids.append(oid)
                 if entity.is_out_of_bounds():
                     if eid not in ids:
                         ids.append(eid)

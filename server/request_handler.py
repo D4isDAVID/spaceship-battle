@@ -79,4 +79,4 @@ if __name__ == '__main__':
         command = input()
         if command == 'stop':
             pygame.quit()
-            quit()
+            exit()

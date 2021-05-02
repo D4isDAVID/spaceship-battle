@@ -28,7 +28,7 @@ class Lobby:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    break
+                    exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w: self.move[0] = True
                     elif event.key == pygame.K_a: self.move[1] = True
