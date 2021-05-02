@@ -13,8 +13,9 @@ class PlayerEntity:
         self.score = 0
         self.x = -50
         self.y = -50
-        self.alive = True
+        self.alive = False
         self.spawning = False
+        self.spawn()
     
     def spawn_thread(self):
         time.sleep(2.5)
