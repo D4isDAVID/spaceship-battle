@@ -24,7 +24,8 @@ class Lobby:
                                     ids.append(eid)
                                 if isinstance(other, PlayerEntity):
                                     if other.alive == True:
-                                        other.hp -= 1
+                                        if hasattr(other, 'hp'):
+                                            other.hp -= 1
                                         other.score -= 1
                                         entity.entity.score += 1
                                 elif isinstance(other, BulletEntity):
