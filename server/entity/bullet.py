@@ -15,11 +15,10 @@ class BulletEntity:
         ]
     
     def get_distance(self, other):
-        if isinstance(other, PlayerEntity):
-            if other != self.entity:
-                dx = (other.x) - (self.x)
-                dy = (other.y) - (self.y)
-                return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
+        if other != self.entity:
+            dx = (other.x) - (self.x)
+            dy = (other.y) - (self.y)
+            return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
         return -1
     
     def update(self):

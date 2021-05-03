@@ -14,16 +14,16 @@ class Lobby:
         surface.fill(0)
         e = self.entities[self.entity_id]
         width, height = pygame.display.get_window_size()
-        x = -100 - e.x + width/2
-        y = -100 - e.y + height/2
-        pygame.draw.rect(surface, (255, 100, 100), (x, y, 2600, 100))
-        pygame.draw.rect(surface, (255, 100, 100), (x, y, 100, 2600))
+        x = -25 - e.x + width/2
+        y = -25 - e.y + height/2
+        pygame.draw.rect(surface, (255, 0, 15), (x, y, 2525, 25))
+        pygame.draw.rect(surface, (255, 0, 15), (x, y, 25, 2525))
         y = 2500 - e.y + height/2
-        pygame.draw.rect(surface, (255, 100, 100), (x, y, 2600, 100))
+        pygame.draw.rect(surface, (255, 0, 15), (x, y, 2525, 25))
         x = 2500 - e.x + width/2
-        y = -100 - e.y + height/2
-        pygame.draw.rect(surface, (255, 100, 100), (x, y, 100, 2700))
-        surface.blit(pygame.font.SysFont('Arial', 30).render(f'({e.x//1}, {e.y//1})', True, (255, 255, 255)), (10, 10))
+        y = -25 - e.y + height/2
+        pygame.draw.rect(surface, (255, 0, 15), (x, y, 25, 2550))
+        surface.blit(pygame.font.SysFont('Arial', 30).render(f'({int(e.x)}, {int(e.y//1)})', True, (255, 255, 255)), (10, 10))
         for entity in list(self.entities.values()):
             entity.draw(surface, e)
 

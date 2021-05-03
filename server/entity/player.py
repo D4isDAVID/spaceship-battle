@@ -1,6 +1,7 @@
 import random
 import time
 from threading import Thread
+import math
 
 
 class PlayerEntity:
@@ -11,32 +12,35 @@ class PlayerEntity:
         self.velocity = 2
         self.move = [False, False, False, False, False]
         self.score = 0
-        self.x = -50
-        self.y = -50
+        self.x = 1250
+        self.y = 1250
         self.hp = 0
-        self.alive = False
         self.spawning = False
         self.spawn()
     
+    def get_distance(self, other):
+        if isinstance(other, PlayerEntity):
+            if other != self:
+                dx = (other.x) - (self.x)
+                dy = (other.y) - (self.y)
+                return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
+        return -1
+    
     def spawn_thread(self):
+        self.spawning = True
         time.sleep(2.5)
-        self.hp = 3
-        self.alive = True
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
+        self.hp = 3
         self.spawning = False
-        print(self.x, self.y)
     
     def spawn(self):
-        self.spawning = True
         thread = Thread(target=self.spawn_thread)
         thread.daemon = True
         thread.start()
     
     def update(self):
-        if self.alive:
-            if self.hp <= 0:
-                self.alive = False
+        if self.hp > 0:
             velocity = self.velocity
             if self.move[4]: velocity *= 1.5
             if self.is_moving_in_two_directions(): velocity *= (5/6)
@@ -46,8 +50,6 @@ class PlayerEntity:
             if self.move[3]: self.x += velocity
             self.validate_position()
         else:
-            self.x = -50
-            self.y = -50
             if self.spawning == False: self.spawn()
     
     def is_moving_in_two_directions(self):

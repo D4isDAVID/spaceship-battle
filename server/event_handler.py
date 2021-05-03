@@ -38,6 +38,7 @@ class EventHandler:
         if event == 'move':
             player.move = value
         elif event == 'shoot':
-            lobby.entities[lobby.entity_count] = BulletEntity(player, value)
-            lobby.entity_count += 1
+            if player.hp > 0:
+                lobby.entities[lobby.entity_count] = BulletEntity(player, value)
+                lobby.entity_count += 1
         return lobby.entities
