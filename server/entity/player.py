@@ -22,8 +22,8 @@ class PlayerEntity:
         time.sleep(2.5)
         self.hp = 3
         self.alive = True
-        self.x = random.randint(0, 1280)
-        self.y = random.randint(0, 720)
+        self.x = random.randint(0, 2500)
+        self.y = random.randint(0, 2500)
         self.spawning = False
         print(self.x, self.y)
     
@@ -58,8 +58,8 @@ class PlayerEntity:
                         return True
         return False
     
-    def validate_position(self):
+    def validate_position(self,):
         if self.y - self.radius < 0: self.y = self.radius
-        elif self.y + self.radius > 720: self.y = 720 - self.radius
+        elif self.y + self.radius > 2500: self.y = 2500 - self.radius
         if self.x - self.radius < 0: self.x = self.radius
-        elif self.x + self.radius > 1280: self.x = 1280 - self.radius
+        elif self.x + self.radius > 2500: self.x = 2500 - self.radius

@@ -1,5 +1,6 @@
 from request_client import Client
 import pygame
+pygame.font.init()
 import math
 
 
@@ -11,8 +12,20 @@ class Lobby:
     
     def draw(self, surface):
         surface.fill(0)
+        e = self.entities[self.entity_id]
+        width, height = pygame.display.get_window_size()
+        x = -100 - e.x + width/2
+        y = -100 - e.y + height/2
+        pygame.draw.rect(surface, (255, 100, 100), (x, y, 2600, 100))
+        pygame.draw.rect(surface, (255, 100, 100), (x, y, 100, 2600))
+        y = 2500 - e.y + height/2
+        pygame.draw.rect(surface, (255, 100, 100), (x, y, 2600, 100))
+        x = 2500 - e.x + width/2
+        y = -100 - e.y + height/2
+        pygame.draw.rect(surface, (255, 100, 100), (x, y, 100, 2700))
+        surface.blit(pygame.font.SysFont('Arial', 30).render(f'({e.x//1}, {e.y//1})', True, (255, 255, 255)), (10, 10))
         for entity in list(self.entities.values()):
-            entity.draw(surface)
+            entity.draw(surface, e)
 
     def main(self, name, hostname, port=7723):
         window = pygame.display.set_mode((1280, 720))
@@ -45,10 +58,11 @@ class Lobby:
                     events['move'] = self.move
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
+                    width, height = pygame.display.get_window_size()
 
                     pos = [
-                        pos[0]-self.entities[self.entity_id].x,
-                        pos[1]-self.entities[self.entity_id].y
+                        pos[0]-width/2,
+                        pos[1]-height/2
                     ]
 
                     events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180

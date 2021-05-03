@@ -27,7 +27,7 @@ class BulletEntity:
         self.y += self.velocity[1]
     
     def is_out_of_bounds(self):
-        if not (self.x < 0 or self.x + self.radius > 1280):
-            if not (self.y < 0 or self.y + self.radius > 720):
+        if not (self.x < 0 or self.x + self.radius > 2500):
+            if not (self.y < 0 or self.y + self.radius > 2500):
                 return False
         return True
