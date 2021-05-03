@@ -9,7 +9,8 @@ class PlayerEntity:
         self.name = name
         self.color = color
         self.radius = 25
-        self.velocity = 2
+        self.rotation = 270
+        self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
         self.score = 0
         self.x = 1250
@@ -42,12 +43,20 @@ class PlayerEntity:
     def update(self):
         if self.hp > 0:
             velocity = self.velocity
-            if self.move[4]: velocity *= 1.5
-            if self.is_moving_in_two_directions(): velocity *= (5/6)
-            if self.move[0]: self.y -= velocity
-            if self.move[1]: self.x -= velocity
-            if self.move[2]: self.y += velocity
-            if self.move[3]: self.x += velocity
+            if self.move[4]: velocity = [i*1.5 for i in velocity]
+            if self.is_moving_in_two_directions(): velocity = [i*(5/6) for i in velocity]
+            if self.move[0]:
+                self.x += velocity[0]
+                self.y += velocity[1]
+            if self.move[1]: self.rotation -= 1.5
+            if self.move[2]:
+                self.x -= velocity[0]
+                self.y -= velocity[1]
+            if self.move[3]: self.rotation += 1.5
+            self.velocity = [
+                math.cos(self.rotation / 180 * math.pi) * 2,
+                math.sin(self.rotation / 180 * math.pi) * 2
+            ]
             self.validate_position()
         else:
             if self.spawning == False: self.spawn()
