@@ -26,9 +26,10 @@ class Lobby:
                                 if isinstance(other, PlayerEntity):
                                     if other.hp > 0:
                                         other.hp -= 1
-                                        other.score -= 1
-                                        entity.entity.score += 1
                                         ids.add(eid)
+                                    if other.hp == 0:
+                                        entity.entity.score += 1
+                                        other.score -= 1
                                 elif isinstance(other, BulletEntity):
                                     if oid not in ids:
                                         ids.add(eid)

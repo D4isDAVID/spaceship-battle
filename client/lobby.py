@@ -2,6 +2,7 @@ from request_client import Client
 import pygame
 pygame.font.init()
 import math
+from entity.player import PlayerEntity
 
 
 class Lobby:
@@ -24,7 +25,11 @@ class Lobby:
         y = -25 - e.y + height/2
         pygame.draw.rect(surface, (255, 0, 15), (x, y, 25, 2550))
         surface.blit(pygame.font.SysFont('Arial', 30).render(f'({int(e.x)}, {int(e.y//1)})', True, (255, 255, 255)), (10, 10))
+        count = 0
         for entity in list(self.entities.values()):
+            if isinstance(entity, PlayerEntity):
+                count += 1
+                entity.draw_score(surface, count)
             entity.draw(surface, e)
 
     def main(self, name, hostname, port=7723):

@@ -30,3 +30,7 @@ class PlayerEntity:
                     640 - text.get_width() // 2,
                     240
                 ))
+    
+    def draw_score(self, surface, y):
+        text = self.FONT.render(f'{self.score} - {self.name}', True, (255, 255, 255))
+        surface.blit(text, (1200 - text.get_width(), 15*y+5*y))
