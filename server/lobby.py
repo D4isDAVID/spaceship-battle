@@ -14,7 +14,6 @@ class Lobby:
     def update(self):
         ids = []
         for eid, entity in self.entities.items():
-            entity.update()
             if isinstance(entity, BulletEntity):
                 for oid, other in self.entities.items():
                     if entity != other:
@@ -25,7 +24,7 @@ class Lobby:
                                     ids.append(eid)
                                 if isinstance(other, PlayerEntity):
                                     if other.alive == True:
-                                        other.alive = False
+                                        other.hp -= 1
                                         other.score -= 1
                                         entity.entity.score += 1
                                 elif isinstance(other, BulletEntity):
@@ -34,6 +33,7 @@ class Lobby:
                 if entity.is_out_of_bounds():
                     if eid not in ids:
                         ids.append(eid)
+            entity.update()
         if ids:
             for eid in ids:
                 self.entities.pop(eid)

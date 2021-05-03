@@ -13,12 +13,14 @@ class PlayerEntity:
         self.score = 0
         self.x = -50
         self.y = -50
+        self.hp = 0
         self.alive = False
         self.spawning = False
         self.spawn()
     
     def spawn_thread(self):
         time.sleep(2.5)
+        self.hp = 3
         self.alive = True
         self.x = random.randint(0, 1280)
         self.y = random.randint(0, 720)
@@ -33,6 +35,8 @@ class PlayerEntity:
     
     def update(self):
         if self.alive:
+            if self.hp <= 0:
+                self.alive = False
             velocity = self.velocity
             if self.move[4]: velocity *= 1.5
             if self.is_moving_in_two_directions(): velocity *= (5/6)
