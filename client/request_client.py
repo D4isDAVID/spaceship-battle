@@ -19,6 +19,6 @@ class Client:
     def send(self, events):
         try:
             self.socket.sendall(dumps(events))
-            return loads(self.socket.recv(2048))
+            return loads(self.socket.recv(4096))
         except OSError as e:
             print(f"[EXCEPTION] {e}")
