@@ -7,7 +7,7 @@ class BulletEntity:
         self.entity = entity
         self.x = self.entity.x
         self.y = self.entity.y
-        self.radius = 2.5
+        self.radius = 3
         self.color = (255, 255, 255)
         self.velocity = [
             math.cos(angle / 180 * math.pi) * 12,

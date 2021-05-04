@@ -8,7 +8,7 @@ class PlayerEntity:
     def __init__(self, name):
         self.name = name
         self.asset = 'rocket'
-        self.radius = 25
+        self.radius = 30
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]

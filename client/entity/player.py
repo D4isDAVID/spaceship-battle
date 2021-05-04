@@ -1,8 +1,8 @@
 import pygame
 pygame.font.init()
 import os
-rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_red.png'), (50, 50))
-rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_blue.png'), (50, 50))
+rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_red.png'), (60, 60))
+rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_blue.png'), (60, 60))
 
 class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)
@@ -30,20 +30,17 @@ class PlayerEntity:
             text = self.FONT.render(self.name, True, color)
             surface.blit(text, (
                 x - text.get_width() // 2,
-                y - self.radius - text.get_height() - 2
+                y - self.radius - text.get_height() - 3
             ))
             text = self.FONT.render(f'{self.hp}/5', True, color)
             surface.blit(text, (
                 x - text.get_width() // 2,
-                y + text.get_height() - 2
+                y + text.get_height() - 3
             ))
         else:
             if self == entity:
                 text = self.BIG_FONT.render('Spawning...', True, (255, 255, 255))
-                surface.blit(text, (
-                    640 - text.get_width() // 2,
-                    240
-                ))
+                surface.blit(text, (640 - text.get_width() // 2, 240))
     
     def draw_score(self, surface, y):
         text = self.FONT.render(f'{self.score} - {self.name}', True, (255, 255, 255))
