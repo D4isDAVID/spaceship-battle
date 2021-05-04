@@ -12,6 +12,7 @@ class PlayerEntity:
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
+        self.move_time = 0
         self.score = 0
         self.x = 1250
         self.y = 1250
@@ -32,7 +33,7 @@ class PlayerEntity:
         time.sleep(2.5)
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
-        self.hp = 3
+        self.hp = 5
         self.spawning = False
     
     def spawn(self):
@@ -44,30 +45,23 @@ class PlayerEntity:
         if self.hp > 0:
             velocity = self.velocity
             if self.move[4]: velocity = [i*1.5 for i in velocity]
-            if self.is_moving_in_two_directions(): velocity = [i*(5/6) for i in velocity]
-            if self.move[0]:
-                self.x += velocity[0]
-                self.y += velocity[1]
+            if self.move[0]: self.move_time += 0.06
             if self.move[1]: self.rotation -= 1.5
-            if self.move[2]:
-                self.x -= velocity[0]
-                self.y -= velocity[1]
+            if self.move[2]: self.move_time -= 0.06
             if self.move[3]: self.rotation += 1.5
             self.velocity = [
-                math.cos(self.rotation / 180 * math.pi) * 2,
-                math.sin(self.rotation / 180 * math.pi) * 2
+                math.cos(self.rotation / 180 * math.pi) * 2.5,
+                math.sin(self.rotation / 180 * math.pi) * 2.5
             ]
+            if self.move_time < 0: self.move_time += 0.01
+            if self.move_time > 0: self.move_time -= 0.01
+            if self.move_time < -1: self.move_time = -1
+            if self.move_time > 1: self.move_time = 1
+            self.x += velocity[0] * self.move_time
+            self.y += velocity[1] * self.move_time
             self.validate_position()
         else:
             if self.spawning == False: self.spawn()
-    
-    def is_moving_in_two_directions(self):
-        if not (self.move[0] and self.move[2]):
-            if not (self.move[1] and self.move[3]):
-                if self.move[0] or self.move[2]:
-                    if self.move[1] or self.move[3]:
-                        return True
-        return False
     
     def validate_position(self,):
         if self.y - self.radius < 0: self.y = self.radius

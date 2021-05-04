@@ -18,7 +18,7 @@ class PlayerEntity:
                 x - text.get_width() // 2,
                 y - self.radius - text.get_height() - 2
             ))
-            text = self.FONT.render(f'{self.hp}/3', True, self.color)
+            text = self.FONT.render(f'{self.hp}/5', True, self.color)
             surface.blit(text, (
                 x - text.get_width() // 2,
                 y + text.get_height() - 2
