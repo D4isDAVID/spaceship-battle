@@ -1,8 +1,8 @@
 import pygame
 pygame.font.init()
 import os
-rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_red.png'), (55, 55))
-rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/entity/assets/rocket_blue.png'), (55, 55))
+rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_red.png'), (55, 55))
+rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_blue.png'), (55, 55))
 
 class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)

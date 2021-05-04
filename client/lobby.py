@@ -1,8 +1,10 @@
 from request_client import Client
 import pygame
 pygame.font.init()
+pygame.mixer.init()
 import math
 from entity.player import PlayerEntity
+import os
 
 
 class Lobby:
@@ -17,7 +19,7 @@ class Lobby:
         width, height = pygame.display.get_window_size()
         x = -25 - e.x + width/2
         y = -25 - e.y + height/2
-        pygame.draw.rect(surface, (225, 225, 255), (x, y, 2525, 25))
+        pygame.draw.rect(surface, (225, 225, 225), (x, y, 2525, 25))
         pygame.draw.rect(surface, (225, 225, 225), (x, y, 25, 2525))
         y = 2500 - e.y + height/2
         pygame.draw.rect(surface, (225, 225, 225), (x, y, 2525, 25))
@@ -37,6 +39,9 @@ class Lobby:
         client = Client(hostname, port)
         self.entity_id = client.send({'join': [0, name]})
         self.entities = client.send({})
+        theme = pygame.mixer.music.load(f'{os.getcwd()}/client/assets/theme.ogg')
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(loops=-1)
 
         while True:
             self.draw(window)
