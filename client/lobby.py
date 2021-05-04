@@ -17,13 +17,13 @@ class Lobby:
         width, height = pygame.display.get_window_size()
         x = -25 - e.x + width/2
         y = -25 - e.y + height/2
-        pygame.draw.rect(surface, (255, 0, 15), (x, y, 2525, 25))
-        pygame.draw.rect(surface, (255, 0, 15), (x, y, 25, 2525))
+        pygame.draw.rect(surface, (225, 225, 255), (x, y, 2525, 25))
+        pygame.draw.rect(surface, (225, 225, 225), (x, y, 25, 2525))
         y = 2500 - e.y + height/2
-        pygame.draw.rect(surface, (255, 0, 15), (x, y, 2525, 25))
+        pygame.draw.rect(surface, (225, 225, 225), (x, y, 2525, 25))
         x = 2500 - e.x + width/2
         y = -25 - e.y + height/2
-        pygame.draw.rect(surface, (255, 0, 15), (x, y, 25, 2550))
+        pygame.draw.rect(surface, (225, 225, 225), (x, y, 25, 2550))
         surface.blit(pygame.font.SysFont('Arial', 30).render(f'({int(e.x)}, {int(e.y//1)})', True, (255, 255, 255)), (10, 10))
         count = 0
         for entity in list(self.entities.values()):
