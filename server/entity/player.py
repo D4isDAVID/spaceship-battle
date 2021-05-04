@@ -5,9 +5,9 @@ import math
 
 
 class PlayerEntity:
-    def __init__(self, name, color):
+    def __init__(self, name):
         self.name = name
-        self.color = color
+        self.asset = 'rocket'
         self.radius = 25
         self.rotation = 270
         self.velocity = [0, 0]
@@ -34,7 +34,7 @@ class PlayerEntity:
         time.sleep(2.5)
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
-        self.hp = max_hp
+        self.hp = self.max_hp
         self.spawning = False
     
     def spawn(self):
@@ -61,6 +61,10 @@ class PlayerEntity:
             self.x += velocity[0] * self.move_time
             self.y += velocity[1] * self.move_time
             self.validate_position()
+            if self.rotation < 0:
+                self.rotation = (360 + self.rotation)
+            if self.rotation > 360:
+                self.rotation = (self.rotation - 360)
         else:
             if self.spawning == False: self.spawn()
     
