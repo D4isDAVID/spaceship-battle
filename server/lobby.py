@@ -24,8 +24,8 @@ class Lobby:
                         if d != -1:
                             if d < entity.radius+other.radius:
                                 if isinstance(other, PlayerEntity):
+                                    other.hp -= 1
                                     if other.hp > 0:
-                                        other.hp -= 1
                                         ids.add(eid)
                                     if other.hp == 0:
                                         entity.entity.score += 1

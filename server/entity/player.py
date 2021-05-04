@@ -17,6 +17,7 @@ class PlayerEntity:
         self.x = 1250
         self.y = 1250
         self.hp = 0
+        self.max_hp = 5
         self.spawning = False
         self.spawn()
     
@@ -33,7 +34,7 @@ class PlayerEntity:
         time.sleep(2.5)
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
-        self.hp = 5
+        self.hp = max_hp
         self.spawning = False
     
     def spawn(self):

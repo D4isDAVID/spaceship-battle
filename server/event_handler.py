@@ -25,6 +25,7 @@ class EventHandler:
             if event == 'join':
                 self.server.players[player_id].lobby_id = value[0]
                 lobby = self.server.lobbies[value[0]]
+                if len(value[1]) > 16: value[1] = value[1][:16]
                 self.server.players[player_id].entity_id = lobby.entity_count
                 lobby.entities[lobby.entity_count] = PlayerEntity(
                     value[1],
