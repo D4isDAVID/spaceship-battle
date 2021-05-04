@@ -65,6 +65,11 @@ class Lobby:
                     elif event.key == pygame.K_s: self.move[2] = False
                     elif event.key == pygame.K_d: self.move[3] = False
                     elif event.key == pygame.K_LSHIFT: self.move[4] = False
+                    elif event.key == pygame.K_m:
+                        if pygame.mixer.music.get_volume() == 0:
+                            pygame.mixer.music.set_volume(0.3)
+                        else:
+                            pygame.mixer.music.set_volume(0)
                     events['move'] = self.move
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
