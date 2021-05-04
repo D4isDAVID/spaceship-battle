@@ -26,7 +26,7 @@ class Lobby:
         x = 2500 - e.x + width/2
         y = -25 - e.y + height/2
         pygame.draw.rect(surface, (225, 225, 225), (x, y, 25, 2550))
-        surface.blit(pygame.font.SysFont('Arial', 30).render(f'({int(e.x)}, {int(e.y//1)})', True, (255, 255, 255)), (10, 10))
+        surface.blit(pygame.font.SysFont('Arial', 30).render(f'({int(e.x)}, {int(e.y//1)})', True, (255, 255, 255)), (10, 675))
         count = 0
         for entity in list(self.entities.values()):
             if isinstance(entity, PlayerEntity):

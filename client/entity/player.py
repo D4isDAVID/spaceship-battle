@@ -1,8 +1,8 @@
 import pygame
 pygame.font.init()
 import os
-rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_red.png'), (55, 55))
-rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_blue.png'), (55, 55))
+rocket_red = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_red.png'), (60, 60))
+rocket_blue = pygame.transform.scale(pygame.image.load(f'{os.getcwd()}/client/assets/rocket_blue.png'), (60, 60))
 
 class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)
@@ -44,4 +44,8 @@ class PlayerEntity:
     
     def draw_score(self, surface, y):
         text = self.FONT.render(f'{self.score} - {self.name}', True, (255, 255, 255))
-        surface.blit(text, (1200 - text.get_width(), 15*y+5*y))
+        rect = pygame.Surface((text.get_width()+12, text.get_height()+4))
+        pygame.draw.rect(rect, (255, 255, 255), (0, 0, rect.get_width(), rect.get_height()))
+        rect.set_alpha(50)
+        surface.blit(rect, (1255 - rect.get_width()+6, rect.get_height()*y))
+        surface.blit(text, (1255 - text.get_width(), text.get_height()*y+5*y))
