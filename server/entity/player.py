@@ -1,7 +1,7 @@
 import random
 import time
-from threading import Thread
 import math
+from threading import Thread
 
 
 class PlayerEntity:

@@ -1,6 +1,5 @@
 import pygame
 pygame.font.init()
-import os
 rocket_red = pygame.transform.scale(pygame.image.load('assets/rocket_red.png'), (60, 60))
 rocket_blue = pygame.transform.scale(pygame.image.load('assets/rocket_blue.png'), (60, 60))
 

@@ -1,10 +1,9 @@
-from request_client import Client
+import math
 import pygame
+from request_client import Client
+from entity.player import PlayerEntity
 pygame.font.init()
 pygame.mixer.init()
-import math
-from entity.player import PlayerEntity
-import os
 
 
 class Lobby:
