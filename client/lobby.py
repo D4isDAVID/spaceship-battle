@@ -39,7 +39,7 @@ class Lobby:
         client = Client(hostname, port)
         self.entity_id = client.send({'join': [0, name]})
         self.entities = client.send({})
-        theme = pygame.mixer.music.load(f'{os.getcwd()}/assets/theme.ogg')
+        theme = pygame.mixer.music.load('assets/theme.ogg')
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(loops=-1)
 
