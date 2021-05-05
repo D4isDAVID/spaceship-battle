@@ -1,5 +1,6 @@
 import math
 import pygame
+import os
 from request_client import Client
 from entity.player import PlayerEntity
 pygame.font.init()
@@ -38,7 +39,9 @@ class Lobby:
         client = Client(hostname, port)
         self.entity_id = client.send({'join': [0, name]})
         self.entities = client.send({})
-        theme = pygame.mixer.music.load('assets/theme.ogg')
+        loc = os.path.dirname(os.path.realpath( __file__ ))
+        theme = os.path.join(loc, 'assets', 'theme.ogg')
+        theme = pygame.mixer.music.load(theme)
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(loops=-1)
 

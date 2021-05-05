@@ -1,7 +1,13 @@
 import pygame
 pygame.font.init()
-rocket_red = pygame.transform.scale(pygame.image.load('assets/rocket_red.png'), (60, 60))
-rocket_blue = pygame.transform.scale(pygame.image.load('assets/rocket_blue.png'), (60, 60))
+import os
+loc = os.path.dirname(os.path.realpath( __file__ ))[:-7]
+rocket_red = os.path.join(loc, 'assets', 'rocket_red.png')
+rocket_red = pygame.image.load(rocket_red)
+rocket_red = pygame.transform.scale(rocket_red, (60, 60))
+rocket_blue = os.path.join(loc, 'assets', 'rocket_blue.png')
+rocket_blue = pygame.image.load(rocket_blue)
+rocket_blue = pygame.transform.scale(rocket_blue, (60, 60))
 
 class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)
@@ -20,7 +26,10 @@ class PlayerEntity:
             asset = rocket_red
             color = (255, 0, 0)
         
-        asset = pygame.transform.rotate(asset, -90-self.rotation)
+        asset = pygame.transform.rotate(
+            asset,
+            -90 - self.rotation
+        ).convert_alpha()
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
 
         if self.hp > 0:
