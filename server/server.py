@@ -44,7 +44,7 @@ class Server:
         server = socket(AF_INET, SOCK_STREAM)
 
         try:
-            print(f"Binding server to 127.0.0.1:{port}")
+            print(f"Binding server to 0.0.0.0:{port}")
             server.bind(('', port))
         except OSError as e:
             print(f"[EXCEPTION], {e}")
