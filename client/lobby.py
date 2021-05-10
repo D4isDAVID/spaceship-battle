@@ -34,7 +34,7 @@ class Lobby:
         text = f'({int(e.x)}, {int(e.y)})'
         text = self.FONT.render(text, True, (255, 255, 255))
         surface.blit(text, (10, 675))
-        text = self.FONT.render('0.4.1-alpha', True, (255, 255, 255))
+        text = self.FONT.render('0.3.1-alpha', True, (255, 255, 255))
         surface.blit(text, (1270-text.get_width(), 675))
         minimap_size = 200
         minimap = pygame.Surface((2600, 2600))
@@ -44,10 +44,11 @@ class Lobby:
             if isinstance(entity, PlayerEntity):
                 count += 1
                 entity.draw_score(surface, count)
-                if entity_id == self.entity_id:
-                    pygame.draw.circle(minimap, (0, 0, 255), (entity.x+50, entity.y+50), entity.radius)
-                else:
-                    pygame.draw.circle(minimap, (255, 0, 0), (entity.x+50, entity.y+50), entity.radius)
+                if entity.hp > 0:
+                    if entity_id == self.entity_id:
+                        pygame.draw.circle(minimap, (0, 0, 255), (entity.x+50, entity.y+50), entity.radius)
+                    else:
+                        pygame.draw.circle(minimap, (255, 0, 0), (entity.x+50, entity.y+50), entity.radius)
             entity.draw(surface, e)
         minimap.set_alpha(200)
         surface.blit(pygame.transform.scale(minimap, (minimap_size, minimap_size)), (15, 15))

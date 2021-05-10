@@ -40,7 +40,7 @@ class Lobby:
                         d = entity.get_distance(other)
                         if d != -1:
                             if d < entity.radius+other.radius:
-                                if other.hp > 0:
+                                if other.hp > 0 and entity.hp > 0:
                                     entity.hp = 0
                                     other.hp = 0
             entity.update()

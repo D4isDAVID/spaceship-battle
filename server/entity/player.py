@@ -35,6 +35,7 @@ class PlayerEntity:
         time.sleep(2.5)
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
+        self.rotation = 270
         self.hp = self.max_hp
         self.spawning = False
     
