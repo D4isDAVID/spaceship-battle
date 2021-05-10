@@ -13,7 +13,7 @@ class PlayerEntity:
         self.move = [False, False, False, False, False]
         self.move_time = 0
         self.shoot_time = 0
-        self.cooldown = 0.25
+        self.shot_cooldown = 0.25
         self.score = 0
         self.x = 1250
         self.y = 1250
@@ -65,7 +65,7 @@ class PlayerEntity:
             self.validate_position()
             if self.rotation < 0: self.rotation = (360 + self.rotation)
             if self.rotation > 360: self.rotation = (self.rotation - 360)
-            if self.shoot_time < self.cooldown: self.shoot_time += 0.01
+            if self.shoot_time < self.shot_cooldown: self.shoot_time += 0.01
         else:
             if self.spawning == False: self.spawn()
     

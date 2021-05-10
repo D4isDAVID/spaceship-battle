@@ -8,7 +8,7 @@ pygame.mixer.init()
 
 
 class Lobby:
-    FONT = pygame.font.SysFont('Arial', 30)
+    FONT = pygame.font.SysFont('Arial', 25)
 
     def __init__(self):
         self.entities = []
@@ -34,12 +34,11 @@ class Lobby:
         text = f'({int(e.x)}, {int(e.y)})'
         text = self.FONT.render(text, True, (255, 255, 255))
         surface.blit(text, (10, 675))
-        text = self.FONT.render('0.3.1-alpha', True, (255, 255, 255))
-        surface.blit(text, (1270-text.get_width(), 675))
         minimap_size = 200
         minimap = pygame.Surface((2600, 2600))
         pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 2600, 2600), 50)
         count = 0
+        server_ver = 'server 0.3.0-alpha'
         for entity_id, entity in self.entities.items():
             if isinstance(entity, PlayerEntity):
                 count += 1
@@ -49,7 +48,13 @@ class Lobby:
                         pygame.draw.circle(minimap, (0, 0, 255), (entity.x+50, entity.y+50), entity.radius)
                     else:
                         pygame.draw.circle(minimap, (255, 0, 0), (entity.x+50, entity.y+50), entity.radius)
+                if hasattr(entity, 'shot_cooldown'):
+                    server_ver = 'server 0.3.1-alpha'
             entity.draw(surface, e)
+        text = self.FONT.render(server_ver, True, (255, 255, 255))
+        surface.blit(text, (1270-text.get_width(), 670-text.get_height()))
+        text = self.FONT.render('client 0.3.1-alpha', True, (255, 255, 255))
+        surface.blit(text, (1270-text.get_width(), 675))
         minimap.set_alpha(200)
         surface.blit(pygame.transform.scale(minimap, (minimap_size, minimap_size)), (15, 15))
 
