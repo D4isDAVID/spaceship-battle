@@ -19,7 +19,7 @@ class Lobby:
         surface.fill(0)
         e = self.entities[self.entity_id]
         width, height = pygame.display.get_window_size()
-        block_size = 100
+        block_size = 125
         for i in range(0, 2500, block_size):
             for j in range(0, 2500, block_size):
                 x = i - e.x + width/2
