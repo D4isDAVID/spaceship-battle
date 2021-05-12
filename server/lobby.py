@@ -4,9 +4,6 @@ from entity.bullet import BulletEntity
 
 
 class Lobby:
-    PLAYER_MAX = 16
-    MAX_PLAYERS = 8
-
     def __init__(self):
         self.entity_count = 0
         self.entities = {}
@@ -20,9 +17,9 @@ class Lobby:
                     continue
                 for oid, other in self.entities.items():
                     if entity != other:
-                        d = entity.get_distance(other)
-                        if d != -1:
-                            if d < entity.radius+other.radius:
+                        distance = entity.get_distance(other)
+                        if distance != -1:
+                            if distance < entity.radius+other.radius:
                                 if isinstance(other, PlayerEntity):
                                     other.hp -= 1
                                     if other.hp > 0:
@@ -37,9 +34,9 @@ class Lobby:
             else:
                 for oid, other in self.entities.items():
                     if entity != other:
-                        d = entity.get_distance(other)
-                        if d != -1:
-                            if d < entity.radius+other.radius:
+                        distance = entity.get_distance(other)
+                        if distance != -1:
+                            if distance < entity.radius+other.radius:
                                 if other.hp > 0 and entity.hp > 0:
                                     entity.hp = 0
                                     other.hp = 0

@@ -11,7 +11,7 @@ class Lobby:
     FONT = pygame.font.SysFont('Arial', 25)
 
     def __init__(self):
-        self.entities = []
+        self.entities = {}
         self.entity_id = None
         self.move = [False, False, False, False, False]
     
@@ -27,10 +27,10 @@ class Lobby:
                 rect = pygame.Rect(x, y, block_size, block_size)
                 pygame.draw.rect(surface, (35, 35, 35), rect, 1)
         border_size = 10
-        x = -border_size/2 - e.x + width/2
-        y = -border_size/2 - e.y + height/2
-        rect = (x, y, 2500+border_size, 2500+border_size)
-        pygame.draw.rect(surface, (255, 0, 0), rect, border_size)
+        border_x = -border_size/2 - e.x + width/2
+        border_y = -border_size/2 - e.y + height/2
+        border_rect = (border_x, border_y, 2500+border_size, 2500+border_size)
+        pygame.draw.rect(surface, (255, 0, 0), border_rect, border_size)
         text = f'({int(e.x)}, {int(e.y)})'
         text = self.FONT.render(text, True, (255, 255, 255))
         surface.blit(text, (10, 675))
@@ -38,22 +38,17 @@ class Lobby:
         minimap = pygame.Surface((2600, 2600))
         pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 2600, 2600), 50)
         count = 0
-        server_ver = 'server 0.3.0-alpha'
         for entity_id, entity in self.entities.items():
             if isinstance(entity, PlayerEntity):
                 count += 1
                 entity.draw_score(surface, count)
                 if entity.hp > 0:
                     if entity_id == self.entity_id:
-                        pygame.draw.circle(minimap, (0, 0, 255), (entity.x+50, entity.y+50), entity.radius)
+                        pygame.draw.circle(minimap, (0, 0, 255), (entity.x+50, entity.y+50), entity.radius*2)
                     else:
-                        pygame.draw.circle(minimap, (255, 0, 0), (entity.x+50, entity.y+50), entity.radius)
-                if hasattr(entity, 'shot_cooldown'):
-                    server_ver = 'server 0.3.1-alpha'
+                        pygame.draw.circle(minimap, (255, 0, 0), (entity.x+50, entity.y+50), entity.radius*2)
             entity.draw(surface, e)
-        text = self.FONT.render(server_ver, True, (255, 255, 255))
-        surface.blit(text, (1270-text.get_width(), 670-text.get_height()))
-        text = self.FONT.render('client 0.3.1-alpha', True, (255, 255, 255))
+        text = self.FONT.render('client 0.3.2-alpha', True, (255, 255, 255))
         surface.blit(text, (1270-text.get_width(), 675))
         minimap.set_alpha(200)
         surface.blit(pygame.transform.scale(minimap, (minimap_size, minimap_size)), (15, 15))
@@ -65,8 +60,9 @@ class Lobby:
         self.entities = client.send({})
         loc = os.path.dirname(os.path.realpath( __file__ ))
         theme = os.path.join(loc, 'assets', 'theme.wav')
+        volume = 0.3
         theme = pygame.mixer.music.load(theme)
-        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.set_volume(volume)
         pygame.mixer.music.play(loops=-1)
 
         while True:
@@ -77,7 +73,7 @@ class Lobby:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    break
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w: self.move[0] = True
                     elif event.key == pygame.K_a: self.move[1] = True
@@ -93,9 +89,17 @@ class Lobby:
                     elif event.key == pygame.K_LSHIFT: self.move[4] = False
                     elif event.key == pygame.K_m:
                         if pygame.mixer.music.get_volume() == 0:
-                            pygame.mixer.music.set_volume(0.3)
+                            pygame.mixer.music.set_volume(volume)
                         else:
                             pygame.mixer.music.set_volume(0)
+                    elif event.key == pygame.K_EQUALS:
+                        volume += 0.05
+                        if volume > 1: volume = 1
+                        pygame.mixer.music.set_volume(volume)
+                    elif event.key == pygame.K_MINUS:
+                        volume -= 0.05
+                        if volume < 0: volume = 0
+                        pygame.mixer.music.set_volume(volume)
                     events['move'] = self.move
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()

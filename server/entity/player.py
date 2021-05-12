@@ -5,20 +5,21 @@ from threading import Thread
 
 
 class PlayerEntity:
+    SHOT_COOLDOWN = 0.5
+    MAX_HP = 5
+
     def __init__(self, name):
         self.name = name
-        self.radius = 30
+        self.radius = 35
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
         self.move_time = 0
         self.shoot_time = 0
-        self.shot_cooldown = 0.25
         self.score = 0
         self.x = 1250
         self.y = 1250
         self.hp = 0
-        self.max_hp = 5
         self.spawning = False
         self.spawn()
     
@@ -36,7 +37,7 @@ class PlayerEntity:
         self.x = random.randint(0, 2500)
         self.y = random.randint(0, 2500)
         self.rotation = 270
-        self.hp = self.max_hp
+        self.hp = self.MAX_HP
         self.spawning = False
     
     def spawn(self):
@@ -65,7 +66,7 @@ class PlayerEntity:
             self.validate_position()
             if self.rotation < 0: self.rotation = (360 + self.rotation)
             if self.rotation > 360: self.rotation = (self.rotation - 360)
-            if self.shoot_time < self.shot_cooldown: self.shoot_time += 0.01
+            if self.shoot_time < self.SHOT_COOLDOWN: self.shoot_time += 0.01
         else:
             if self.spawning == False: self.spawn()
     

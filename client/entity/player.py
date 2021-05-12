@@ -31,6 +31,8 @@ class PlayerEntity:
             -90 - self.rotation
         ).convert_alpha()
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
+        x = self.x - entity.x + width/2
+        y = self.y - entity.y + height/2
 
         if self.hp > 0:
             surface.blit(asset, rect)
@@ -43,7 +45,7 @@ class PlayerEntity:
             text = self.FONT.render(f'{self.hp}/5', True, color)
             surface.blit(text, (
                 x - text.get_width() // 2,
-                y + text.get_height() - 3
+                y + text.get_height()
             ))
         else:
             if self == entity:

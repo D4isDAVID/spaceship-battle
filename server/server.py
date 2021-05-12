@@ -1,4 +1,5 @@
 import pygame
+import sys
 from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
 from threading import Thread
@@ -27,7 +28,7 @@ class Server:
 
                 reply = self.event_handler.handle_events(events, player_id)
                 client.sendall(dumps(reply))
-        except OSError as e:
+        except Exception as e:
             print(f"[EXCEPTION] {e}")
         
         lobby = self.lobbies[self.players[player_id].lobby_id]
@@ -79,4 +80,4 @@ if __name__ == '__main__':
         command = input()
         if command == 'stop':
             pygame.quit()
-            exit()
+            sys.exit()
