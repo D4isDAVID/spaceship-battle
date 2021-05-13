@@ -59,7 +59,7 @@ class Server:
         lobby.start()
         while True:
             client, address = server.accept()
-            print(f"[CONNECTION] From {address[0]}:{address[1]}")
+            print(f"Connect | {address[0]}:{address[1]}")
             self.players[player_count] = ServerPlayer()
             thread = Thread(
                 target=self.client_thread,
