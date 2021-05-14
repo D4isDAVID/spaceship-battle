@@ -24,9 +24,9 @@ class Lobby:
         background.draw(surface, e)
         width, height = pygame.display.get_window_size()
         border_size = 10
-        border_x = -border_size/2 - e.x + width/2
-        border_y = -border_size/2 - e.y + height/2
-        border_rect = (border_x, border_y, 3500+border_size/2, 3500+border_size/2)
+        border_x = border_size - e.x + width/2
+        border_y = border_size - e.y + height/2
+        border_rect = (border_x, border_y, 3500-border_size*2, 3500-border_size*2)
         pygame.draw.rect(surface, (255, 0, 0), border_rect, border_size)
         minimap_size = 200
         pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 3485, 3485), 30)
