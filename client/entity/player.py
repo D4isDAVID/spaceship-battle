@@ -1,7 +1,7 @@
 import pygame
 pygame.font.init()
 import os
-loc = os.path.dirname(os.path.realpath( __file__ ))[:-7]
+loc = os.path.dirname(os.path.realpath(__file__))[:-7]
 rocket_red = os.path.join(loc, 'assets', 'rocket_red.png')
 rocket_red = pygame.image.load(rocket_red)
 rocket_red = pygame.transform.scale(rocket_red, (60, 60))
@@ -26,17 +26,13 @@ class PlayerEntity:
             asset = rocket_red
             color = (255, 0, 0)
         
-        asset = pygame.transform.rotate(
-            asset,
-            -90 - self.rotation
-        ).convert_alpha()
+        asset = pygame.transform.rotate(asset, -90 - self.rotation).convert_alpha()
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
         x = self.x - entity.x + width/2
         y = self.y - entity.y + height/2
 
         if self.hp > 0:
             surface.blit(asset, rect)
-
             text = self.FONT.render(self.name, True, color)
             surface.blit(text, (
                 x - text.get_width() // 2,
