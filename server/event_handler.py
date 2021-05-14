@@ -1,4 +1,3 @@
-from player import ServerPlayer
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
 
