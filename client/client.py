@@ -3,6 +3,7 @@ import pygame
 import os
 from request_client import Client
 from entity.player import PlayerEntity
+from background import Background
 pygame.font.init()
 pygame.mixer.init()
 
@@ -15,10 +16,12 @@ class Lobby:
         self.entity_id = None
         self.move = [False, False, False, False, False]
     
-    def draw(self, surface, minimap):
+    def draw(self, surface, minimap, background):
         surface.fill(0)
         minimap.fill(0)
         e = self.entities[self.entity_id]
+        background.update()
+        background.draw(surface, e)
         width, height = pygame.display.get_window_size()
         border_size = 10
         border_x = -border_size/2 - e.x + width/2
@@ -28,7 +31,7 @@ class Lobby:
         minimap_size = 200
         pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 3475, 3475), 50)
         count = 0
-        for entity_id, entity in self.entities.items():
+        for entity in self.entities.values():
             if isinstance(entity, PlayerEntity):
                 count += 1
                 entity.draw_score(surface, count)
@@ -48,6 +51,8 @@ class Lobby:
         client = Client(hostname, port)
         self.entity_id = client.send({'join': [0, name]})
         self.entities = client.send({})
+        e = self.entities[self.entity_id]
+        background = Background(e.x, e.y, (0.1, -0.1))
         loc = os.path.dirname(os.path.realpath( __file__ ))
         theme = os.path.join(loc, 'assets', 'theme.wav')
         volume = 0.3
@@ -56,7 +61,7 @@ class Lobby:
         pygame.mixer.music.play(loops=-1)
 
         while True:
-            self.draw(window, minimap)
+            self.draw(window, minimap, background)
             pygame.display.update()
 
             events = {}

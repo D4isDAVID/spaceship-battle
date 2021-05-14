@@ -28,8 +28,6 @@ class PlayerEntity:
         
         asset = pygame.transform.rotate(asset, -90 - self.rotation).convert_alpha()
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
-        x = self.x - entity.x + width/2
-        y = self.y - entity.y + height/2
 
         if self.hp > 0:
             surface.blit(asset, rect)
