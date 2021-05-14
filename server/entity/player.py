@@ -14,7 +14,7 @@ class PlayerEntity:
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
-        self.move_time = 0
+        self.move_time = 0.0
         self.shoot_time = 0
         self.score = 0
         self.x = 1250
@@ -60,6 +60,8 @@ class PlayerEntity:
             ]
             if self.move_time < 0: self.move_time += 0.01
             if self.move_time > 0: self.move_time -= 0.01
+            if (-0.01 < self.move_time) and (0.01 > self.move_time):
+                self.move_time = 0
             if self.move_time < -1: self.move_time = -1
             if self.move_time > 1: self.move_time = 1
             self.x += velocity[0] * self.move_time
