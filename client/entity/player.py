@@ -42,8 +42,8 @@ class PlayerEntity:
                 y + text.get_height()
             ))
             pygame.draw.circle(minimap, color,
-                               (entity.x, entity.y),
-                               entity.radius*2)
+                               (self.x, self.y),
+                               self.radius*2.5)
         else:
             if self == entity:
                 text = self.BIG_FONT.render('Spawning...', True, (255, 255, 255))

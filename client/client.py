@@ -29,7 +29,7 @@ class Lobby:
         border_rect = (border_x, border_y, 3500+border_size, 3500+border_size)
         pygame.draw.rect(surface, (255, 0, 0), border_rect, border_size)
         minimap_size = 200
-        pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 3475, 3475), 50)
+        pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 3485, 3485), 30)
         count = 0
         for entity in self.entities.values():
             if isinstance(entity, PlayerEntity):
