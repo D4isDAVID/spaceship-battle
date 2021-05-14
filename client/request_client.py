@@ -14,11 +14,11 @@ class Client:
             self.socket.connect(self.address)
             return int(self.socket.recv(1024).decode())
         except OSError as e:
-            print(f"[EXCEPTION] {e}")
+            print(f"Exception | {e}")
     
     def send(self, events):
         try:
             self.socket.sendall(dumps(events))
             return loads(self.socket.recv(4096))
         except OSError as e:
-            print(f"[EXCEPTION] {e}")
+            print(f"Exception | {e}")

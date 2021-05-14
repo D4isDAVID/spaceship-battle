@@ -29,13 +29,13 @@ class Server:
                 reply = self.event_handler.handle_events(events, player_id)
                 client.sendall(dumps(reply))
         except Exception as e:
-            print(f"[EXCEPTION] {e}")
+            print(f"Exception | {e}")
         
         lobby = self.lobbies[self.players[player_id].lobby_id]
         lobby.entities.pop(self.players[player_id].entity_id)
         self.players.pop(player_id)
         client.close()
-        print(f"[DISCONNECTED] Player {player_id}")
+        print(f"Disconnect | Player {player_id}")
     
     def lobby_thread(self, lobby_id):
         lobby = self.lobbies[lobby_id]
@@ -48,7 +48,7 @@ class Server:
             print(f"Binding server to 0.0.0.0:{port}")
             server.bind(('', port))
         except OSError as e:
-            print(f"[EXCEPTION], {e}")
+            print(f"Exception | {e}")
         
         server.listen(1)
         print("Server is online.")
