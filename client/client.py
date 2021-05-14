@@ -15,41 +15,28 @@ class Lobby:
         self.entity_id = None
         self.move = [False, False, False, False, False]
     
-    def draw(self, surface):
+    def draw(self, surface, minimap):
         surface.fill(0)
+        minimap.fill(0)
         e = self.entities[self.entity_id]
         width, height = pygame.display.get_window_size()
-        block_size = 350
-        for i in range(0, 3500, block_size):
-            for j in range(0, 3500, block_size):
-                x = i - e.x + width/2
-                y = j - e.y + height/2
-                rect = pygame.Rect(x, y, block_size, block_size)
-                pygame.draw.rect(surface, (35, 35, 35), rect, 1)
         border_size = 10
         border_x = -border_size/2 - e.x + width/2
         border_y = -border_size/2 - e.y + height/2
         border_rect = (border_x, border_y, 3500+border_size, 3500+border_size)
         pygame.draw.rect(surface, (255, 0, 0), border_rect, border_size)
-        text = f'({int(e.x)}, {int(e.y)})'
-        text = self.FONT.render(text, True, (255, 255, 255))
-        surface.blit(text, (10, 675))
         minimap_size = 200
-        minimap = pygame.Surface((3500, 3500))
         pygame.draw.rect(minimap, (255, 255, 255), (0, 0, 3475, 3475), 50)
         count = 0
         for entity_id, entity in self.entities.items():
             if isinstance(entity, PlayerEntity):
                 count += 1
                 entity.draw_score(surface, count)
-                if entity.hp > 0:
-                    color = (255, 0, 0)
-                    if entity_id == self.entity_id:
-                        color = (0, 0, 255)
-                    pygame.draw.circle(minimap, color,
-                                        (entity.x, entity.y),
-                                        entity.radius*2)
-            entity.draw(surface, e)
+                entity.draw(surface, minimap, e)
+            else:
+                entity.draw(surface, e)
+        text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
+        surface.blit(text, (10, 675))
         text = self.FONT.render('client 0.3.2-alpha', True, (255, 255, 255))
         surface.blit(text, (1270-text.get_width(), 675))
         minimap.set_alpha(200)
@@ -57,6 +44,7 @@ class Lobby:
 
     def main(self, name, hostname, port=7723):
         window = pygame.display.set_mode((1280, 720))
+        minimap = pygame.Surface((3500, 3500))
         client = Client(hostname, port)
         self.entity_id = client.send({'join': [0, name]})
         self.entities = client.send({})
@@ -68,7 +56,7 @@ class Lobby:
         pygame.mixer.music.play(loops=-1)
 
         while True:
-            self.draw(window)
+            self.draw(window, minimap)
             pygame.display.update()
 
             events = {}

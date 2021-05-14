@@ -13,7 +13,7 @@ class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)
     BIG_FONT = pygame.font.SysFont('Arial', 50)
 
-    def draw(self, surface, entity):
+    def draw(self, surface, minimap, entity):
         width, height = pygame.display.get_window_size()
         x = self.x - entity.x + width/2
         y = self.y - entity.y + height/2
@@ -47,6 +47,9 @@ class PlayerEntity:
                 x - text.get_width() // 2,
                 y + text.get_height()
             ))
+            pygame.draw.circle(minimap, color,
+                               (entity.x, entity.y),
+                               entity.radius*2)
         else:
             if self == entity:
                 text = self.BIG_FONT.render('Spawning...', True, (255, 255, 255))
@@ -58,4 +61,4 @@ class PlayerEntity:
         pygame.draw.rect(rect, (255, 255, 255), (0, 0, rect.get_width(), rect.get_height()))
         rect.set_alpha(50)
         surface.blit(rect, (1255 - rect.get_width()+6, rect.get_height()*y))
-        surface.blit(text, (1255 - text.get_width(), text.get_height()*y+5*y))
+        surface.blit(text, (1255 - text.get_width(), text.get_height()*y+4*y))
