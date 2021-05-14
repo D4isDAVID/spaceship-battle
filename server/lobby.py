@@ -31,6 +31,8 @@ class Lobby:
                                         ids.add(eid)
                                         ids.add(oid)
             else:
+                if entity.is_out_of_bounds():
+                    entity.hp = 0
                 for oid, other in self.entities.items():
                     if entity != other:
                         distance = entity.get_distance(other)

@@ -34,8 +34,9 @@ class PlayerEntity:
     def spawn_thread(self):
         self.spawning = True
         time.sleep(2.5)
-        self.x = random.randint(0, 5000)
-        self.y = random.randint(0, 5000)
+        self.move_time = 0.0
+        self.x = random.randint(self.radius, 5000-self.radius)
+        self.y = random.randint(self.radius, 5000-self.radius)
         self.rotation = 270
         self.hp = self.MAX_HP
         self.spawning = False
@@ -63,15 +64,14 @@ class PlayerEntity:
             if self.move_time > 1: self.move_time = 1
             self.x += velocity[0] * self.move_time
             self.y += velocity[1] * self.move_time
-            self.validate_position()
             if self.rotation < 0: self.rotation = (360 + self.rotation)
             if self.rotation > 360: self.rotation = (self.rotation - 360)
             if self.shoot_time < self.SHOT_COOLDOWN: self.shoot_time += 0.01
         else:
             if self.spawning == False: self.spawn()
     
-    def validate_position(self):
-        if self.y - self.radius < 0: self.y = self.radius
-        elif self.y + self.radius > 3500: self.y = 3500 - self.radius
-        if self.x - self.radius < 0: self.x = self.radius
-        elif self.x + self.radius > 3500: self.x = 3500 - self.radius
+    def is_out_of_bounds(self):
+        if not (self.x - self.radius < 0 or self.x + self.radius > 3500):
+            if not (self.y - self.radius < 0 or self.y + self.radius > 3500):
+                return False
+        return True
