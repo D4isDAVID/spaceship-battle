@@ -11,6 +11,5 @@ PyInstaller.__main__.run([
     '.\\client\\client.py',
     f'-p=.\\venv\\Lib\\site-packages',
     '--hidden-import=entity.bullet',
-    '--onefile',
-    f'--add-data=.\\client\\assets{add_data_sep}.\\assets'
+    f'--add-data=.\\client\\assets{add_data_sep}.\\assets',
 ])
