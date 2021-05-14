@@ -35,8 +35,8 @@ class PlayerEntity:
         self.spawning = True
         time.sleep(2.5)
         self.move_time = 0.0
-        self.x = random.randint(self.radius, 5000-self.radius)
-        self.y = random.randint(self.radius, 5000-self.radius)
+        self.x = random.randint(self.radius, 3500-self.radius)
+        self.y = random.randint(self.radius, 3500-self.radius)
         self.rotation = 270
         self.hp = self.MAX_HP
         self.spawning = False
