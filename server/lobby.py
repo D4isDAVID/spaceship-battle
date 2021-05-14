@@ -10,12 +10,14 @@ class Lobby:
     
     def update(self):
         ids = set()
-        for eid, entity in self.entities.items():
+        for eid in list(self.entities.keys()):
+            entity = self.entities[eid]
             if isinstance(entity, BulletEntity):
                 if entity.is_out_of_bounds():
                     ids.add(eid)
                     continue
-                for oid, other in self.entities.items():
+                for oid in list(self.entities.keys()):
+                    other = self.entities[oid]
                     if entity != other:
                         distance = entity.get_distance(other)
                         if distance != -1:
@@ -33,7 +35,8 @@ class Lobby:
             else:
                 if entity.is_out_of_bounds():
                     entity.hp = 0
-                for oid, other in self.entities.items():
+                for oid in list(self.entities.keys()):
+                    other = self.entities[oid]
                     if entity != other:
                         distance = entity.get_distance(other)
                         if distance != -1:
