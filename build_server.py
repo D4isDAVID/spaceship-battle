@@ -1,7 +1,12 @@
+import os
 import PyInstaller.__main__
 
 
+path = os.path.dirname(__file__)
+
+
 PyInstaller.__main__.run([
-    '.\\server\\server.py',
-    f'-p=.\\venv\\Lib\\site-packages',
+    f'{path}\\server\\server.py',
+    '--onefile',
+    f'-p={path}\\venv\\Lib\\site-packages',
 ])
