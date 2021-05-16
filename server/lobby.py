@@ -37,8 +37,6 @@ class Lobby:
                                         ids.add(eid)
                                         ids.add(oid)
             else:
-                if entity.is_out_of_bounds():
-                    entity.hp = 0
                 for oid in list(self.entities.keys()):
                     other = self.entities[oid]
                     if entity != other:

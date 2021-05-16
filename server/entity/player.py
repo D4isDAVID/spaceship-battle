@@ -66,14 +66,15 @@ class PlayerEntity:
             if self.move_time > 1: self.move_time = 1
             self.x += velocity[0] * self.move_time
             self.y += velocity[1] * self.move_time
+            self.validate_position()
             if self.rotation < 0: self.rotation = (360 + self.rotation)
             if self.rotation > 360: self.rotation = (self.rotation - 360)
             if self.shoot_time < self.SHOT_COOLDOWN: self.shoot_time += 0.01
         else:
             if self.spawning == False: self.spawn()
     
-    def is_out_of_bounds(self):
-        if not (self.x - self.radius < 0 or self.x + self.radius > 3500):
-            if not (self.y - self.radius < 0 or self.y + self.radius > 3500):
-                return False
-        return True
+    def validate_position(self):
+        if self.y - self.radius < 0: self.y = self.radius
+        elif self.y + self.radius > 3500: self.y = 3500 - self.radius
+        if self.x - self.radius < 0: self.x = self.radius
+        elif self.x + self.radius > 3500: self.x = 3500 - self.radius
