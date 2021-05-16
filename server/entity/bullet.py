@@ -1,9 +1,11 @@
 import math
+import copy
 
 
 class BulletEntity:
     def __init__(self, entity, angle):
         self.entity = entity
+        self.original_entity = copy.deepcopy(entity)
         self.x = self.entity.x
         self.y = self.entity.y
         self.radius = 4
