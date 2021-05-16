@@ -15,20 +15,24 @@ class Lobby:
             if isinstance(entity, BulletEntity):
                 if entity.is_out_of_bounds():
                     ids.add(eid)
-                    continue
                 for oid in list(self.entities.keys()):
                     other = self.entities[oid]
                     if entity != other:
                         distance = entity.get_distance(other)
                         if distance != -1:
-                            if distance < entity.radius+other.radius:
-                                if isinstance(other, PlayerEntity):
-                                    other.hp -= 1
-                                    if other.hp >= 0:
+                            if isinstance(other, PlayerEntity):
+                                if entity.entity != other:
+                                    if distance < entity.radius+other.radius:
+                                        other.hp -= 1
+                                        if other.hp >= 0:
+                                            ids.add(eid)
+                                        if other.hp == 0:
+                                            entity.entity.score += 1
+                                else:
+                                    if distance > 1700:
                                         ids.add(eid)
-                                    if other.hp == 0:
-                                        entity.entity.score += 1
-                                elif isinstance(other, BulletEntity):
+                            elif isinstance(other, BulletEntity):
+                                if distance < entity.radius+other.radius:
                                     if oid not in ids:
                                         ids.add(eid)
                                         ids.add(oid)
