@@ -45,29 +45,29 @@ class Server:
         server = socket(AF_INET, SOCK_STREAM)
 
         try:
-            print(f"Binding server to 0.0.0.0:{port}")
             server.bind(('', port))
+            print(f"Server bound to 0.0.0.0:{port}")
+            server.listen(1)
         except OSError as e:
             print(f"Exception | {e}")
-        
-        server.listen(1)
-        print("Server is online.")
+        else:
+            print("Server is online. (v0.3.3-alpha)")
 
-        player_count = 0
-        lobby = Thread(target=self.lobby_thread, args=(0, ))
-        lobby.daemon = True
-        lobby.start()
-        while True:
-            client, address = server.accept()
-            print(f"Connect | {address[0]}:{address[1]}")
-            self.players[player_count] = ServerPlayer()
-            thread = Thread(
-                target=self.client_thread,
-                args=(client, player_count)
-            )
-            thread.daemon = True
-            thread.start()
-            player_count += 1
+            player_count = 0
+            lobby = Thread(target=self.lobby_thread, args=(0, ))
+            lobby.daemon = True
+            lobby.start()
+            while True:
+                client, address = server.accept()
+                print(f"Connect | {address[0]}:{address[1]}")
+                self.players[player_count] = ServerPlayer()
+                thread = Thread(
+                    target=self.client_thread,
+                    args=(client, player_count)
+                )
+                thread.daemon = True
+                thread.start()
+                player_count += 1
         
 
 if __name__ == '__main__':

@@ -40,7 +40,7 @@ class Lobby:
                 entity.draw(surface, e)
         text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
         surface.blit(text, (10, 675))
-        text = self.FONT.render('client 0.3.2-alpha', True, (255, 255, 255))
+        text = self.FONT.render('0.3.3-alpha', True, (255, 255, 255))
         surface.blit(text, (1270-text.get_width(), 675))
         minimap.set_alpha(200)
         surface.blit(pygame.transform.scale(minimap, (minimap_size, minimap_size)), (15, 15))
