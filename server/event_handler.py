@@ -33,7 +33,6 @@ class EventHandler:
                     pcount = 0
                     for entity in lobby.entities.values():
                         if hasattr(entity, 'name'):
-                            print(entity.name)
                             if entity.name == new:
                                 count += 1
                                 new = f'{value[1]} ({count})'
