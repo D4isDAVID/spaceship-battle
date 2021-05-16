@@ -6,7 +6,7 @@ from threading import Thread
 
 class PlayerEntity:
     SHOT_COOLDOWN = 0.5
-    MAX_HP = 5
+    MAX_HP = 4
 
     def __init__(self, name):
         self.name = name
