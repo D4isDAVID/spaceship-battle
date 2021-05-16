@@ -25,24 +25,6 @@ class EventHandler:
                 self.server.players[player_id].lobby_id = value[0]
                 lobby = self.server.lobbies[value[0]]
                 if len(value[1]) > 16: value[1] = value[1][:16]
-
-                count = 0
-                new = value[1]
-                while True:
-                    dcount = 0
-                    pcount = 0
-                    for entity in lobby.entities.values():
-                        if hasattr(entity, 'name'):
-                            if entity.name == new:
-                                count += 1
-                                new = f'{value[1]} ({count})'
-                                pcount -= 1
-                            dcount += 1
-                            pcount += 1
-                    if dcount == pcount:
-                        break
-                value[1] = new
-
                 self.server.players[player_id].entity_id = lobby.entity_count
                 lobby.entities[lobby.entity_count] = PlayerEntity(value[1])
                 lobby.entity_count += 1

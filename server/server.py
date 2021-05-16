@@ -18,7 +18,7 @@ class Server:
         try:
             client.sendall(str(player_id).encode())
 
-            while True:
+            while 1:
                 data = client.recv(2048)
 
                 if not data:
@@ -31,8 +31,11 @@ class Server:
         except Exception as e:
             print(f"Exception | {e}")
         
-        lobby = self.lobbies[self.players[player_id].lobby_id]
-        lobby.entities.pop(self.players[player_id].entity_id)
+        try:
+            lobby = self.lobbies[self.players[player_id].lobby_id]
+            lobby.entities.pop(self.players[player_id].entity_id)
+        except Exception:
+            pass
         self.players.pop(player_id)
         client.close()
         print(f"Disconnect | Player {player_id}")
@@ -51,23 +54,22 @@ class Server:
         except OSError as e:
             print(f"Exception | {e}")
         else:
-            print("Server is online. (0.3.4-alpha)")
+            print("Server is online. (0.3.5-alpha_DEV)")
 
-            player_count = 0
             lobby = Thread(target=self.lobby_thread, args=(0, ))
             lobby.daemon = True
             lobby.start()
-            while True:
+            while 1:
+                player_id = ServerPlayer.count
                 client, address = server.accept()
                 print(f"Connect | {address[0]}:{address[1]}")
-                self.players[player_count] = ServerPlayer()
+                self.players[player_id] = ServerPlayer()
                 thread = Thread(
                     target=self.client_thread,
-                    args=(client, player_count)
+                    args=(client, player_id)
                 )
                 thread.daemon = True
                 thread.start()
-                player_count += 1
         
 
 if __name__ == '__main__':

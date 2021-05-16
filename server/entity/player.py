@@ -10,7 +10,7 @@ class PlayerEntity:
 
     def __init__(self, name):
         self.name = name
-        self.radius = 35
+        self.radius = 33
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
