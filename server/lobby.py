@@ -1,14 +1,16 @@
-from pygame.time import Clock
+import pygame
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
 
 
 class Lobby:
+    TARGET_FPS = 144
+
     def __init__(self):
         self.entity_count = 0
         self.entities = {}
     
-    def update(self):
+    def update(self, delta_time):
         ids = set()
         for eid in list(self.entities.keys()):
             entity = self.entities[eid]
@@ -45,15 +47,15 @@ class Lobby:
                                 if other.hp > 0 and entity.hp > 0:
                                     entity.hp = 0
                                     other.hp = 0
-            entity.update()
+            entity.update(delta_time, self.TARGET_FPS)
         if ids:
             for eid in ids:
                 self.entities.pop(eid)
 
     def main(self):
-        clock = Clock()
+        clock = pygame.time.Clock()
         print('Lobby Running')
 
         while True:
-            clock.tick(144)
-            self.update()
+            delta_time = clock.tick(0) / 1000
+            self.update(delta_time)

@@ -22,9 +22,9 @@ class BulletEntity:
         dy = (other.y) - (self.y)
         return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
     
-    def update(self):
-        self.x += self.velocity[0]
-        self.y += self.velocity[1]
+    def update(self, delta_time, target_fps):
+        self.x += self.velocity[0] * delta_time * target_fps
+        self.y += self.velocity[1] * delta_time * target_fps
     
     def is_out_of_bounds(self):
         if not (self.x - self.radius < 0 or self.x + self.radius > 3500):
