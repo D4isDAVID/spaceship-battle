@@ -1,6 +1,7 @@
 import math
 import pygame
 import os
+from threading import Thread
 from request_client import Client
 from background import Background
 from entity.player import PlayerEntity
@@ -9,6 +10,7 @@ pygame.init()
 
 class Lobby:
     FONT = pygame.font.SysFont('Arial', 25)
+    TARGET_FPS = 144
 
     def __init__(self):
         self.surface = pygame.display.set_mode((1280, 720))
@@ -22,12 +24,13 @@ class Lobby:
         self.assets['rocket_red'] = pygame.image.load(os.path.join(path, 'assets', 'rocket_red.png'))
         self.assets['rocket_blue'] = pygame.image.load(os.path.join(path, 'assets', 'rocket_blue.png'))
         self.assets['theme'] = os.path.join(path, 'assets', 'theme.wav')
+        self.getting = False
     
-    def draw(self):
+    def draw(self, delta_time):
         self.surface.fill(0)
         self.minimap.fill(0)
         e = self.entities[self.entity_id]
-        self.background.update()
+        self.background.update(delta_time, self.TARGET_FPS)
         self.background.draw(self.surface, e)
         width, height = self.surface.get_size()
         border_size = 10
@@ -50,16 +53,21 @@ class Lobby:
                 entity.draw_score(self.surface, count)
             else:
                 entity.draw(self.surface, e)
+            entity.update(delta_time, self.TARGET_FPS)
         text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
         self.surface.blit(text, (10, 675))
         self.minimap.set_alpha(200)
         self.surface.blit(pygame.transform.scale(self.minimap, (minimap_size, minimap_size)), (15, 15))
 
+    def get_thread(self, client):
+        self.entities = client.get()
+        self.getting = False
+
     def main(self, name, hostname, port=7723):
         clock = pygame.time.Clock()
         client = Client(hostname, port)
-        self.entity_id = client.send({'join': [0, name]})
-        self.entities = client.send({})
+        self.entity_id = client.send_and_recv({'join': [0, name]})
+        self.entities = client.send_and_recv({'get': None})
         pygame.mixer.music.load(self.assets['theme'])
         volume = 0.5
         pygame.mixer.music.set_volume(volume)
@@ -68,8 +76,8 @@ class Lobby:
         close = False
 
         while 1:
-            clock.tick(60)
-            self.draw()
+            delta_time = clock.tick(60) / 1000
+            self.draw(delta_time)
             self.surface.blit(version_text, (1270-version_text.get_width(), 675))
             pygame.display.update()
 
@@ -111,9 +119,11 @@ class Lobby:
                     width, height = pygame.display.get_window_size()
                     pos = [pos[0]-width/2, pos[1]-height/2]
                     events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180
+            client.send(events)
+            if not self.getting:
+                self.getting = True
+                Thread(target=self.get_thread, args=(client,)).start()
 
-            self.entities = client.send(events)
-            
             if close:
                 break
 

@@ -1,6 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
-from threading import Thread
 
 
 class Client:
@@ -17,6 +16,19 @@ class Client:
             print(f"Exception | {e}")
     
     def send(self, events):
+        try:
+            self.socket.sendall(dumps(events))
+        except OSError as e:
+            print(f"Exception | {e}")
+    
+    def get(self):
+        try:
+            self.socket.sendall(dumps({'get': None}))
+            return loads(self.socket.recv(4096))
+        except OSError as e:
+            print(f"Exception | {e}")
+    
+    def send_and_recv(self, events):
         try:
             self.socket.sendall(dumps(events))
             return loads(self.socket.recv(4096))

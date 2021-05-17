@@ -1,3 +1,4 @@
+import math
 import pygame
 pygame.init()
 
@@ -45,3 +46,25 @@ class PlayerEntity:
         rect.set_alpha(50)
         surface.blit(rect, (1255 - rect.get_width()+6, rect.get_height()*y))
         surface.blit(text, (1255 - text.get_width(), text.get_height()*y+4*y))
+
+    def update(self, delta_time, target_fps):
+        velocity = self.velocity
+        if self.move[4]: velocity = [i*1.5 for i in velocity]
+        if self.move[0]: self.move_time += 0.06
+        if self.move[1]: self.rotation -= 1.5 * delta_time * target_fps
+        if self.move[2]: self.move_time -= 0.06
+        if self.move[3]: self.rotation += 1.5 * delta_time * target_fps
+        self.velocity = [
+            math.cos(self.rotation / 180 * math.pi) * 2.5,
+            math.sin(self.rotation / 180 * math.pi) * 2.5
+        ]
+        if self.move_time < 0: self.move_time += 0.01 * delta_time * target_fps
+        if self.move_time > 0: self.move_time -= 0.01 * delta_time * target_fps
+        if (-0.01 < self.move_time) and (0.01 > self.move_time):
+            self.move_time = 0
+        if self.move_time < -1: self.move_time = -1
+        if self.move_time > 1: self.move_time = 1
+        self.x += velocity[0] * self.move_time * delta_time * target_fps
+        self.y += velocity[1] * self.move_time * delta_time * target_fps
+        if self.rotation < 0: self.rotation = (360 + self.rotation)
+        if self.rotation > 360: self.rotation = (self.rotation - 360)

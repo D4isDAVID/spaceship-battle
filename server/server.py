@@ -20,14 +20,12 @@ class Server:
 
             while 1:
                 data = client.recv(2048)
-
                 if not data:
                     break
-
                 events = loads(data)
 
                 reply = self.event_handler.handle_events(events, player_id)
-                client.sendall(dumps(reply))
+                if reply: client.sendall(dumps(reply))
         except Exception as e:
             print(f"Exception | {e}")
         

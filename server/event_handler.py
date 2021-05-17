@@ -39,4 +39,5 @@ class EventHandler:
                 lobby.entities[lobby.entity_count] = BulletEntity(player, value)
                 lobby.entity_count += 1
                 player.shoot_time = 0
-        return lobby.entities
+        elif event == 'get':
+            return lobby.entities

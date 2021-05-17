@@ -10,3 +10,7 @@ class BulletEntity:
         else: self.color = (255, 0, 0)
         pygame.draw.circle(surface, (255, 255, 255), (x, y), self.radius+2, 1)
         pygame.draw.circle(surface, self.color, (x, y), self.radius)
+
+    def update(self, delta_time, target_fps):
+        self.x += self.velocity[0] * delta_time * target_fps
+        self.y += self.velocity[1] * delta_time * target_fps
