@@ -25,7 +25,7 @@ class Server:
                 events = loads(data)
 
                 reply = self.event_handler.handle_events(events, player_id)
-                if reply: client.sendall(dumps(reply))
+                if reply != None: client.sendall(dumps(reply))
         except Exception as e:
             print(f"Exception | {e}")
 
