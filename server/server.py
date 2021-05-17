@@ -13,7 +13,7 @@ class Server:
         self.event_handler = EventHandler(self)
         self.players = {}
         self.lobbies = {0: Lobby()}
-    
+
     def client_thread(self, client, player_id):
         try:
             client.sendall(str(player_id).encode())
@@ -28,7 +28,7 @@ class Server:
                 if reply: client.sendall(dumps(reply))
         except Exception as e:
             print(f"Exception | {e}")
-        
+
         try:
             lobby = self.lobbies[self.players[player_id].lobby_id]
             lobby.entities.pop(self.players[player_id].entity_id)
@@ -37,11 +37,11 @@ class Server:
         self.players.pop(player_id)
         client.close()
         print(f"Disconnect | Player {player_id}")
-    
+
     def lobby_thread(self, lobby_id):
         lobby = self.lobbies[lobby_id]
         lobby.main()
-    
+
     def listen_thread(self, port=7723):
         server = socket(AF_INET, SOCK_STREAM)
 
@@ -68,7 +68,8 @@ class Server:
                 )
                 thread.daemon = True
                 thread.start()
-        
+            server.close()
+
 
 if __name__ == '__main__':
     server = Server()
