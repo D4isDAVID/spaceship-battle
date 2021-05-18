@@ -1,4 +1,3 @@
-import pygame
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
 
@@ -7,6 +6,7 @@ class Lobby:
     TARGET_FPS = 144
 
     def __init__(self):
+        self.players = []
         self.entity_count = 0
         self.entities = {}
     
@@ -63,11 +63,3 @@ class Lobby:
         if ids:
             for eid in ids:
                 self.entities.pop(eid)
-
-    def main(self):
-        clock = pygame.time.Clock()
-        print('Lobby Running')
-
-        while 1:
-            delta_time = clock.tick(0) / 1000
-            self.update(delta_time)

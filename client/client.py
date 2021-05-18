@@ -66,8 +66,9 @@ class Lobby:
     def main(self, name, hostname, port=7723):
         clock = pygame.time.Clock()
         client = Client(hostname, port)
-        self.entity_id = client.send_and_recv({'join': [0, name]})
-        self.entities = client.send_and_recv({'get': None})
+        client.send({'join': [0, name]})
+        self.entity_id = client.recv()
+        self.entities = client.get()
         pygame.mixer.music.load(self.assets['theme'])
         volume = 0.5
         pygame.mixer.music.set_volume(volume)
@@ -120,12 +121,9 @@ class Lobby:
                     pos = [pos[0]-width/2, pos[1]-height/2]
                     events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180
             client.send(events)
-            if not self.getting:
-                self.getting = True
-                Thread(target=self.get_thread, args=(client,)).start()
+            self.entities = client.recv()
 
-            if close:
-                break
+            if close: break
 
 if __name__ == '__main__':
     ip = input("Enter Server IP: ")

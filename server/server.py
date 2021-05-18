@@ -4,13 +4,13 @@ from socket import socket, AF_INET, SOCK_STREAM
 from pickle import dumps, loads
 from threading import Thread
 from lobby import Lobby
-from event_handler import EventHandler
 from player import ServerPlayer
+from entity.player import PlayerEntity
+from entity.bullet import BulletEntity
 
 
 class Server:
     def __init__(self):
-        self.event_handler = EventHandler(self)
         self.players = {}
         self.lobbies = {0: Lobby()}
 
@@ -24,7 +24,32 @@ class Server:
                     break
                 events = loads(data)
 
-                reply = self.event_handler.handle_events(events, player_id)
+                reply = None
+
+                lobby_id = self.players[player_id].lobby_id
+                for event, value in events.items():
+                    if lobby_id == None:
+                        reply = self.lobbies
+                        if event == 'join':
+                            self.players[player_id].lobby_id = value[0]
+                            lobby = self.lobbies[value[0]]
+                            if len(value[1]) > 16: value[1] = value[1][:16]
+                            self.players[player_id].entity_id = lobby.entity_count
+                            lobby.entities[lobby.entity_count] = PlayerEntity(value[1])
+                            lobby.entity_count += 1
+                            lobby.players.append(player_id)
+                            reply = lobby.entity_count - 1
+                    else:
+                        lobby = self.lobbies[lobby_id]
+                        player = lobby.entities[self.players[player_id].entity_id]
+                        if event == 'move':
+                            player.move = value
+                        elif event == 'shoot':
+                            if player.hp > 0 and player.shoot_time >= player.SHOT_COOLDOWN:
+                                lobby.entities[lobby.entity_count] = BulletEntity(player, value)
+                                lobby.entity_count += 1
+                                player.shoot_time = 0
+
                 if reply != None: client.sendall(dumps(reply))
         except Exception as e:
             print(f"Exception | {e}")
@@ -40,7 +65,19 @@ class Server:
 
     def lobby_thread(self, lobby_id):
         lobby = self.lobbies[lobby_id]
-        lobby.main()
+        clock = pygame.time.Clock()
+        print('Lobby Running')
+
+        while 1:
+            delta_time = clock.tick(60) / 1000
+            lobby.update(delta_time)
+            for player_id in lobby.players:
+                try:
+                    player = self.players[player_id]
+                except KeyError:
+                    pass
+                else:
+                    player.socket.send(dumps(lobby.entities))
 
     def listen_thread(self, port=7723):
         server = socket(AF_INET, SOCK_STREAM)
@@ -61,7 +98,7 @@ class Server:
                 player_id = ServerPlayer.count
                 client, address = server.accept()
                 print(f"Connect | {address[0]}:{address[1]}")
-                self.players[player_id] = ServerPlayer()
+                self.players[player_id] = ServerPlayer(client)
                 thread = Thread(
                     target=self.client_thread,
                     args=(client, player_id)
