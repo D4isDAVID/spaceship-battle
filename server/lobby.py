@@ -21,7 +21,7 @@ class Lobby:
                 if isinstance(entity, BulletEntity):
                     if entity.is_out_of_bounds():
                         ids.add(eid)
-                    if entity.get_distance(entity.original_entity) > 1600:
+                    if entity.get_distance(entity.original_shooter) > 1600:
                         ids.add(eid)
                     for oid in list(self.entities.keys()):
                         try:
@@ -32,16 +32,16 @@ class Lobby:
                             if entity != other:
                                 distance = entity.get_distance(other)
                                 if distance != -1:
-                                    if entity.entity != other:
+                                    if entity.shooter != other:
                                         if isinstance(other, PlayerEntity):
-                                            if distance < entity.radius+other.radius:
+                                            if distance < entity.RADIUS+other.RADIUS:
                                                 other.hp -= 1
                                                 if other.hp >= 0:
                                                     ids.add(eid)
                                                 if other.hp == 0:
-                                                    entity.entity.score += 1
+                                                    entity.shooter.score += 1
                                         elif isinstance(other, BulletEntity):
-                                            if distance < entity.radius+other.radius:
+                                            if distance < entity.RADIUS+other.RADIUS:
                                                 if oid not in ids:
                                                     ids.add(eid)
                                                     ids.add(oid)
@@ -55,7 +55,7 @@ class Lobby:
                             if entity != other:
                                 distance = entity.get_distance(other)
                                 if distance != -1:
-                                    if distance < entity.radius+other.radius:
+                                    if distance < entity.RADIUS+other.RADIUS:
                                         if other.hp > 0 and entity.hp > 0:
                                             entity.hp = 0
                                             other.hp = 0
@@ -63,3 +63,26 @@ class Lobby:
         if ids:
             for eid in ids:
                 self.entities.pop(eid)
+    
+    def serialize(self):
+        serialized = ''
+        
+        for entity_id in list(self.entities.keys()):
+            try:
+                entity = self.entities[entity_id]
+            except KeyError:
+                pass
+            else:
+                if serialized != '': serialized += '|'
+                serialized += f'{entity_id}-{entity.x},{entity.y}'
+                if isinstance(entity, PlayerEntity):
+                    serialized += f',{entity.rotation},{entity.score},{entity.hp},{entity.move_time}'
+                    for i in entity.move:
+                        serialized += f',{int(i)}'
+                    serialized += f',{entity.name}'
+                elif isinstance(entity, BulletEntity):
+                    serialized += f',{entity.shooter_id}'
+                    for i in entity.velocity:
+                        serialized += f',{i}'
+        serialized += '||'
+        return serialized
