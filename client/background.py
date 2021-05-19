@@ -1,6 +1,5 @@
 import pygame
 import os
-import math
 loc = os.path.dirname(os.path.realpath(__file__))
 asset = os.path.join(loc, 'assets', 'bg.png')
 asset = pygame.image.load(asset)
@@ -19,9 +18,9 @@ class Background:
             for y in range(3):
                 self.surface.blit(asset, (self.width*(x), self.height*(y)))
     
-    def update(self):
-        self.x -= self.velocity[0]
-        self.y -= self.velocity[1]
+    def update(self, delta_time, target_fps):
+        self.x -= self.velocity[0] * delta_time * target_fps
+        self.y -= self.velocity[1] * delta_time * target_fps
 
     def draw(self, surface, entity):
         width, height = pygame.display.get_window_size()

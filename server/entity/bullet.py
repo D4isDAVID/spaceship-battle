@@ -3,18 +3,19 @@ import copy
 
 
 class BulletEntity:
-    def __init__(self, entity, angle):
-        self.entity = entity
-        self.original_entity = copy.deepcopy(entity)
-        self.x = self.entity.x
-        self.y = self.entity.y
-        self.radius = 4
-        self.color = (255, 255, 255)
-        velocity = entity.velocity
-        if entity.move[4]: velocity = [v*1.5 for v in velocity]
+    RADIUS = 5
+
+    def __init__(self, shooter_id, shooter, angle):
+        self.shooter_id = shooter_id
+        self.shooter = shooter
+        self.original_shooter = copy.deepcopy(shooter)
+        self.x = self.shooter.x
+        self.y = self.shooter.y
+        velocity = shooter.velocity
+        if shooter.move[4]: velocity = [v*1.5 for v in velocity]
         self.velocity = [
-            math.cos(angle / 180 * math.pi) * 10 + velocity[0] * entity.move_time,
-            math.sin(angle / 180 * math.pi) * 10 + velocity[1] * entity.move_time
+            math.cos(angle / 180 * math.pi) * 10 + velocity[0] * shooter.move_time,
+            math.sin(angle / 180 * math.pi) * 10 + velocity[1] * shooter.move_time
         ]
     
     def get_distance(self, other):
@@ -27,7 +28,7 @@ class BulletEntity:
         self.y += self.velocity[1] * delta_time * target_fps
     
     def is_out_of_bounds(self):
-        if not (self.x - self.radius < 0 or self.x + self.radius > 3500):
-            if not (self.y - self.radius < 0 or self.y + self.radius > 3500):
+        if not (self.x - self.RADIUS < 0 or self.x + self.RADIUS > 3500):
+            if not (self.y - self.RADIUS < 0 or self.y + self.RADIUS > 3500):
                 return False
         return True

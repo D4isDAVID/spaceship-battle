@@ -1,12 +1,19 @@
 import os
+import sys
 import PyInstaller.__main__
 
 
 path = os.path.dirname(__file__)
 
 
-PyInstaller.__main__.run([
-    f'{path}\\server\\server.py',
+settings = [
+    os.path.join(path, "server", "server.py"),
     '--onefile',
-    f'-p={path}\\venv\\Lib\\site-packages',
-])
+]
+
+
+if sys.prefix != sys.base_prefix:
+    settings.append(f'-p={os.path.join(path, "venv", "Lib", "site-packages")}')
+
+
+PyInstaller.__main__.run(settings)

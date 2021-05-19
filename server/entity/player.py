@@ -7,10 +7,10 @@ from threading import Thread
 class PlayerEntity:
     SHOT_COOLDOWN = 0.5
     MAX_HP = 4
+    RADIUS = 33
 
     def __init__(self, name):
         self.name = name
-        self.radius = 35
         self.rotation = 270
         self.velocity = [0, 0]
         self.move = [False, False, False, False, False]
@@ -35,8 +35,8 @@ class PlayerEntity:
         self.spawning = True
         time.sleep(2.5)
         self.move_time = 0.0
-        self.x = random.randint(self.radius, 3500-self.radius)
-        self.y = random.randint(self.radius, 3500-self.radius)
+        self.x = random.randint(self.RADIUS, 3500-self.RADIUS)
+        self.y = random.randint(self.RADIUS, 3500-self.RADIUS)
         self.rotation = 270
         self.hp = self.MAX_HP
         self.spawning = False
@@ -74,7 +74,7 @@ class PlayerEntity:
             if self.spawning == False: self.spawn()
     
     def validate_position(self):
-        if self.y - self.radius < 0: self.y = self.radius
-        elif self.y + self.radius > 3500: self.y = 3500 - self.radius
-        if self.x - self.radius < 0: self.x = self.radius
-        elif self.x + self.radius > 3500: self.x = 3500 - self.radius
+        if self.y - self.RADIUS < 0: self.y = self.RADIUS
+        elif self.y + self.RADIUS > 3500: self.y = 3500 - self.RADIUS
+        if self.x - self.RADIUS < 0: self.x = self.RADIUS
+        elif self.x + self.RADIUS > 3500: self.x = 3500 - self.RADIUS

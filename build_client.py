@@ -1,19 +1,22 @@
 import os
+import sys
 import PyInstaller.__main__
 
 
 path = os.path.dirname(__file__)
+add_data_sep = ':' if os.path.sep == '/' else ';'
 
 
-add_data_sep = ';'
-if os.path.sep == '/':
-    add_data_sep = ':'
-
-
-PyInstaller.__main__.run([
-    f'{path}\\client\\client.py',
+settings = [
+    os.path.join(path, 'client', 'client.py'),
     '--onefile',
-    f'-p=.\\venv\\Lib\\site-packages',
     '--hidden-import=entity.bullet',
-    f'--add-data={path}\\client\\assets{add_data_sep}.\\assets',
-])
+    f'--add-data={os.path.join(path, "client", "assets")}{add_data_sep}assets',
+]
+
+
+if sys.prefix != sys.base_prefix:
+    settings.append(f'-p={os.path.join(path, "venv", "Lib", "site-packages")}')
+
+
+PyInstaller.__main__.run(settings)
