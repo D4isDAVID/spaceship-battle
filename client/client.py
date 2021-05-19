@@ -69,10 +69,10 @@ class Lobby:
     def deserialize(self, data):
         deserialized = {}
         data = data.split('||')
-        if len(data) > 1 and data[-2]:
+        if len(data) > 2 and data[-2]:
             data = data[-2]
         else:
-            data = data[0]
+            return
         entities = data.split('|')
         for e in entities:
             i = e.split('-', 1)

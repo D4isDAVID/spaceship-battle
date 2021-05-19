@@ -18,7 +18,7 @@ class Server:
             client.sendall(str(player_id).encode())
 
             while 1:
-                data = client.recv(1024)
+                data = client.recv(2048)
                 if not data: break
                 data = data.decode()
                 events = {}

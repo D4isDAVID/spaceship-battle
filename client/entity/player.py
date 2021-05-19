@@ -66,7 +66,9 @@ class PlayerEntity:
         velocity = self.velocity
         if self.move[4]: velocity = [i*1.5 for i in velocity]
         if self.move[0]: self.move_time += 0.06
+        if self.move[1]: self.rotation -= 1.5 * delta_time * target_fps
         if self.move[2]: self.move_time -= 0.06
+        if self.move[3]: self.rotation += 1.5 * delta_time * target_fps
         if self.move_time < 0: self.move_time += 0.01 * delta_time * target_fps
         if self.move_time > 0: self.move_time -= 0.01 * delta_time * target_fps
         if (-0.01 < self.move_time) and (0.01 > self.move_time):
@@ -76,6 +78,8 @@ class PlayerEntity:
         self.x += velocity[0] * self.move_time * delta_time * target_fps
         self.y += velocity[1] * self.move_time * delta_time * target_fps
         self.validate_position()
+        if self.rotation < 0: self.rotation = (360 + self.rotation)
+        if self.rotation > 360: self.rotation = (self.rotation - 360)
 
     def validate_position(self):
         if self.y - self.RADIUS < 0: self.y = self.RADIUS

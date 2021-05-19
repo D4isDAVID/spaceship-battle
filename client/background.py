@@ -1,6 +1,5 @@
 import pygame
 import os
-import math
 loc = os.path.dirname(os.path.realpath(__file__))
 asset = os.path.join(loc, 'assets', 'bg.png')
 asset = pygame.image.load(asset)
