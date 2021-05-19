@@ -125,7 +125,7 @@ class Lobby:
             volume = 0.5
             pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play(loops=-1)
-            version_text = self.FONT.render('0.3.5-alpha_DEV', True, (255, 255, 255))
+            version_text = self.FONT.render('0.4.0-alpha', True, (255, 255, 255))
             running = 1
 
             while running:
