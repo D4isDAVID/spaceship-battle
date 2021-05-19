@@ -100,7 +100,7 @@ class Server:
         except OSError as e:
             print(f"Exception | {e}")
         else:
-            print("Server is online. (0.4.0-alpha)")
+            print("Server is online. (0.4.1-alpha)")
 
             lobby = Thread(target=self.lobby_thread, args=(0,))
             lobby.daemon = True

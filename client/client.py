@@ -71,6 +71,8 @@ class Lobby:
         data = data.split('||')
         if len(data) > 2 and data[-2]:
             data = data[-2]
+        elif len(data) > 1 and not data[1]:
+            data = data[0]
         else:
             return
         entities = data.split('|')
@@ -125,7 +127,7 @@ class Lobby:
             volume = 0.5
             pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play(loops=-1)
-            version_text = self.FONT.render('0.4.0-alpha', True, (255, 255, 255))
+            version_text = self.FONT.render('0.4.1-alpha', True, (255, 255, 255))
             running = 1
 
             while running:
