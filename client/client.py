@@ -73,7 +73,6 @@ class Lobby:
             data = data[-2]
         else:
             data = data[0]
-        print(data)
         entities = data.split('|')
         for e in entities:
             i = e.split('-', 1)
@@ -178,7 +177,6 @@ class Lobby:
 
                 serialized = ''
                 for event, value in events.items():
-                    if serialized: serialized += '|'
                     serialized += f'{event}-'
                     if event == 'move':
                         for i in value:
@@ -186,6 +184,7 @@ class Lobby:
                         serialized = serialized[:-1]
                     elif event == 'shoot':
                         serialized += str(value)
+                    serialized += '|'
 
                 if serialized: self.client.sendall(serialized.encode())
         except OSError as e:
