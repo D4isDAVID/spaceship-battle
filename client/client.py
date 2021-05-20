@@ -12,6 +12,7 @@ pygame.init()
 
 class Lobby:
     FONT = pygame.font.SysFont('Arial', 25)
+    BIG_FONT = pygame.font.SysFont('Arial', 50)
     TARGET_FPS = 144
 
     def __init__(self):
@@ -37,6 +38,7 @@ class Lobby:
         except KeyError:
             pass
         else:
+            e.move = self.move
             self.background.update(delta_time, self.TARGET_FPS)
             self.background.draw(self.surface, e)
             width, height = self.surface.get_size()
@@ -48,19 +50,31 @@ class Lobby:
             minimap_size = 200
             pygame.draw.rect(self.minimap, (255, 255, 255), (0, 0, 3485, 3485), 30)
             count = 0
-            for entity in self.entities.values():
-                if isinstance(entity, PlayerEntity):
-                    count += 1
-                    color = (255, 0, 0)
-                    asset = self.assets['rocket_red']
-                    if entity == e:
-                        color = (0, 0, 255)
-                        asset = self.assets['rocket_blue']
-                    entity.draw(self.surface, self.minimap, e, asset, color)
-                    entity.draw_score(self.surface, count)
+            for entity_id in list(self.entities.keys()):
+                try:
+                    entity = self.entities[entity_id]
+                except KeyError:
+                    pass
                 else:
-                    entity.draw(self.surface, e, self.entity_id)
-                entity.update(delta_time, self.TARGET_FPS)
+                    if isinstance(entity, PlayerEntity):
+                        count += 1
+                        entity.draw_score(self.surface, count)
+                        if entity.hp > 0:
+                            color = (0, 0, 255)
+                            asset = self.assets['rocket_blue']
+                            if entity_id != self.entity_id:
+                                color = (255, 0, 0)
+                                asset = self.assets['rocket_red']
+                            entity.draw(self.surface, self.minimap, e, asset, color)
+                        else:
+                            if entity_id == self.entity_id:
+                                text = self.BIG_FONT.render('YOU ARE DEAD', True, (255, 0, 0))
+                                text2 = self.FONT.render('Get ready to spawn...', True, (255, 255, 255))
+                                self.surface.blit(text, (640 - text.get_width() // 2, 240))
+                                self.surface.blit(text2, (640 - text2.get_width() // 2, 240 + text.get_height()))
+                    else:
+                        entity.draw(self.surface, e, self.entity_id)
+                    entity.update(delta_time, self.TARGET_FPS)
             text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
             self.surface.blit(text, (10, 675))
             self.minimap.set_alpha(200)
@@ -69,11 +83,12 @@ class Lobby:
     def deserialize(self, data_full, remains):
         deserialized = {}
         data_list = data_full.split('||')
+        if not isinstance(data_list, list): data_list = [data_list]
         if len(data_list) > 2:
             data = data_list[-2]
         else:
             data = remains + data_list[0]
-        if (len(data_list) != 2 and (not data_list[1])) or data_full.endswith('||'):
+        if (len(data_list) > 2) or (len(data_list) > 1 and not data_list[-1]):
             entities = data.split('|')
             for e in entities:
                 i = e.split('-', 1)
@@ -103,6 +118,8 @@ class Lobby:
                     )
 
             self.entities = deserialized
+        if len(data_list) > 1:
+            return ''
         return data_list[-1]
 
     def get_thread(self):
@@ -111,6 +128,8 @@ class Lobby:
             try:
                 reply = self.client.recv(6144)
                 remains = self.deserialize(reply.decode(), remains)
+                if remains:
+                    print(remains)
             except ValueError:
                 continue
             except Exception as e:
@@ -123,7 +142,7 @@ class Lobby:
             self.client.connect((hostname, port))
             self.id = self.client.recv(1024).decode()
             self.client.sendall(f'join-0,{name}'.encode())
-            self.entity_id = int(self.client.recv(1024).decode())
+            self.entity_id = int(self.client.recv(1024).decode()[0])
             thread = Thread(target=self.get_thread)
             thread.daemon = True
             thread.start()
@@ -135,7 +154,7 @@ class Lobby:
             running = 1
 
             while running:
-                delta_time = clock.tick(144) / 1000
+                delta_time = clock.tick(60) / 1000
                 self.draw(delta_time)
                 self.surface.blit(version_text, (1270-version_text.get_width(), 675))
                 fps_text = self.FONT.render(str(delta_time), True, (255, 255, 255))
