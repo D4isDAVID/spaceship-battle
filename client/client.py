@@ -66,15 +66,15 @@ class Lobby:
             self.minimap.set_alpha(200)
             self.surface.blit(pygame.transform.scale(self.minimap, (minimap_size, minimap_size)), (15, 15))
     
-    def deserialize(self, data):
+    def deserialize(self, data_full, remains):
         deserialized = {}
-        data = data.split('||')
-        if len(data) > 1 and (not data[-1]):
-            data = data[-2]
+        data_list = data_full.split('||')
+        if len(data_list) > 2:
+            data = data_list[-2]
         else:
-            return
-        entities = data.split('|')
-        try:
+            data = remains + data_list[0]
+        if (len(data_list) != 2 and (not data_list[1])) or data_full.endswith('||'):
+            entities = data.split('|')
             for e in entities:
                 i = e.split('-', 1)
                 entity_id = int(i[0])
@@ -101,18 +101,21 @@ class Lobby:
                         int(values[2]),
                         (float(values[3]), float(values[4]))
                     )
-        except ValueError:
-            return
 
-        self.entities = deserialized
+            self.entities = deserialized
+        return data_list[-1]
 
     def get_thread(self):
-        try:
-            while 1:
-                reply = self.client.recv(10240)
-                self.deserialize(reply.decode())
-        except Exception as e:
-            print(f'Exception | {e}')
+        remains = ''
+        while 1:
+            try:
+                reply = self.client.recv(6144)
+                remains = self.deserialize(reply.decode(), remains)
+            except ValueError:
+                continue
+            except Exception as e:
+                print(f'Exception | {e}')
+                break
 
     def main(self, name, hostname, port=7723):
         try:
@@ -132,7 +135,7 @@ class Lobby:
             running = 1
 
             while running:
-                delta_time = clock.tick(60) / 1000
+                delta_time = clock.tick(144) / 1000
                 self.draw(delta_time)
                 self.surface.blit(version_text, (1270-version_text.get_width(), 675))
                 fps_text = self.FONT.render(str(delta_time), True, (255, 255, 255))
