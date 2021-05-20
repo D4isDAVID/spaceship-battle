@@ -69,46 +69,47 @@ class Lobby:
     def deserialize(self, data):
         deserialized = {}
         data = data.split('||')
-        if len(data) > 2 and data[-2]:
+        if len(data) > 1 and (not data[-1]):
             data = data[-2]
-        elif len(data) > 1 and not data[1]:
-            data = data[0]
         else:
             return
         entities = data.split('|')
-        for e in entities:
-            i = e.split('-', 1)
-            entity_id = int(i[0])
-            entity = i[1]
-            if entity.count(',') > 4:
-                values = entity.split(',', 11)
-                move = (values[6], values[7], values[8], values[9], values[10])
-                move = tuple(bool(int(i)) for i in move)
-                deserialized[entity_id] = PlayerEntity(
-                    float(values[0]),
-                    float(values[1]),
-                    float(values[2]),
-                    int(values[3]),
-                    int(values[4]),
-                    float(values[5]),
-                    move,
-                    values[11]
-                )
-            else:
-                values = entity.split(',')
-                deserialized[entity_id] = BulletEntity(
-                    float(values[0]),
-                    float(values[1]),
-                    int(values[2]),
-                    (float(values[3]), float(values[4]))
-                )
+        try:
+            for e in entities:
+                i = e.split('-', 1)
+                entity_id = int(i[0])
+                entity = i[1]
+                if entity.count(',') > 4:
+                    values = entity.split(',', 11)
+                    move = (values[6], values[7], values[8], values[9], values[10])
+                    move = tuple(bool(int(i)) for i in move)
+                    deserialized[entity_id] = PlayerEntity(
+                        float(values[0]),
+                        float(values[1]),
+                        float(values[2]),
+                        int(values[3]),
+                        int(values[4]),
+                        float(values[5]),
+                        move,
+                        values[11]
+                    )
+                else:
+                    values = entity.split(',')
+                    deserialized[entity_id] = BulletEntity(
+                        float(values[0]),
+                        float(values[1]),
+                        int(values[2]),
+                        (float(values[3]), float(values[4]))
+                    )
+        except ValueError:
+            return
 
         self.entities = deserialized
 
     def get_thread(self):
         try:
             while 1:
-                reply = self.client.recv(3072)
+                reply = self.client.recv(10240)
                 self.deserialize(reply.decode())
         except Exception as e:
             print(f'Exception | {e}')
