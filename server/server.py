@@ -47,6 +47,7 @@ class Server:
                             lobby.players.append(player_id)
                             lobby.entity_count += 1
                             reply = lobby.entity_count - 1
+                            Thread(target=self.client_send_thread, args=(client, player_id)).start()
                     else:
                         lobby = self.lobbies[lobby_id]
                         entity_id = self.players[player_id].entity_id
@@ -72,24 +73,23 @@ class Server:
         client.close()
         print(f"Disconnect | Player {player_id}")
 
+    def client_send_thread(self, client, player_id):
+        lobby = self.lobbies[self.players[player_id].lobby_id]
+        clock = pygame.time.Clock()
+
+        while lobby.entities:
+            clock.tick(lobby.TARGET_FPS)
+            if client.fileno() != -1: client.sendall(lobby.serialize().encode())
+
     def lobby_thread(self, lobby_id):
         lobby = self.lobbies[lobby_id]
         clock = pygame.time.Clock()
+        fps = 60
         print('Lobby Running')
 
         while 1:
             delta_time = clock.tick(60) / 1000
             lobby.update(delta_time)
-            for player_id in lobby.players:
-                try:
-                    player = self.players[player_id]
-                except KeyError:
-                    pass
-                else:
-                    try:
-                        player.socket.sendall(lobby.serialize().encode())
-                    except Exception as e:
-                        print(f'Exception | {e}')
 
     def listen_thread(self, port=7723):
         server = socket(AF_INET, SOCK_STREAM)
@@ -131,3 +131,4 @@ if __name__ == '__main__':
         if command == 'stop':
             pygame.quit()
             sys.exit()
+import pygame
