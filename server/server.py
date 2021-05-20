@@ -49,14 +49,15 @@ class Server:
                             reply = lobby.entity_count - 1
                     else:
                         lobby = self.lobbies[lobby_id]
-                        player = lobby.entities[self.players[player_id].entity_id]
+                        entity_id = self.players[player_id].entity_id
+                        entity = lobby.entities[entity_id]
                         if event == 'move':
-                            player.move = value
+                            entity.move = value
                         elif event == 'shoot':
-                            if player.hp > 0 and player.shoot_time >= player.SHOT_COOLDOWN:
-                                lobby.entities[lobby.entity_count] = BulletEntity(player_id, player, value)
+                            if entity.hp > 0 and entity.shoot_time >= entity.SHOT_COOLDOWN:
+                                lobby.entities[lobby.entity_count] = BulletEntity(entity_id, entity, value)
                                 lobby.entity_count += 1
-                                player.shoot_time = 0
+                                entity.shoot_time = 0
 
                 if reply != None: client.sendall(str(reply).encode())
         except Exception as e:
