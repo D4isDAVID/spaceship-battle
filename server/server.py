@@ -14,7 +14,7 @@ class Server:
         self.lobbies = {}
 
     def client_thread(self, client, player_id):
-        client.sendall(str(player_id).encode())
+        client.sendall(f'{player_id}|'.encode())
 
         while 1:
             try:
@@ -38,13 +38,12 @@ class Server:
                             lobby_id = Lobby.count-1
                             self.players[player_id].lobby_id = lobby_id
                             lobby = self.lobbies[lobby_id]
-                            entity_id = lobby.entity_count
-                            self.players[player_id].entity_id = entity_id
+                            self.players[player_id].entity_id = lobby.entity_count
+                            entity_id = self.players[player_id].entity_id
                             lobby.entities[entity_id] = PlayerEntity(value[:16])
                             Thread(target=self.client_send_thread, args=(client, player_id)).start()
-                            lobby.players += 1
                             lobby.entity_count += 1
-                            print(entity_id)
+                            lobby.players += 1
                     else:
                         lobby = self.lobbies[lobby_id]
                         entity_id = self.players[player_id].entity_id

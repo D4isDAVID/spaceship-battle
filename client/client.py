@@ -32,54 +32,47 @@ class Lobby:
     def draw(self, delta_time):
         self.surface.fill(0)
         self.minimap.fill(0)
-        try:
-            e = self.entities[self.entity_id]
-        except KeyError:
-            pass
-        else:
-            self.background.update(delta_time, self.TARGET_FPS)
-            self.background.draw(self.surface, e)
-            width, height = self.surface.get_size()
-            border_size = 10
-            border_x = border_size - e.x + width/2
-            border_y = border_size - e.y + height/2
-            border_rect = (border_x, border_y, 3500-border_size*2, 3500-border_size*2)
-            pygame.draw.rect(self.surface, (255, 0, 0), border_rect, border_size)
-            minimap_size = 200
-            pygame.draw.rect(self.minimap, (255, 255, 255), (0, 0, 3485, 3485), 30)
-            count = 0
-            for entity_id in list(self.entities.keys()):
-                try:
-                    entity = self.entities[entity_id]
-                except KeyError:
-                    pass
-                else:
-                    if isinstance(entity, PlayerEntity):
-                        count += 1
-                        entity.draw_score(self.surface, count)
-                        if entity.hp > 0:
-                            color = (0, 0, 255)
-                            asset = self.assets['rocket_blue']
-                            if entity_id != self.entity_id:
-                                color = (255, 0, 0)
-                                asset = self.assets['rocket_red']
-                            else:
-                                e = entity
-                                e.move = self.move
-                            entity.draw(self.surface, self.minimap, e, asset, color)
+        e = self.entities.get(self.entity_id, PlayerEntity(1500, 1500, 270, 0, 0, 0, 0, ''))
+        self.background.update(delta_time, self.TARGET_FPS)
+        self.background.draw(self.surface, e)
+        width, height = self.surface.get_size()
+        border_size = 10
+        border_x = border_size - e.x + width/2
+        border_y = border_size - e.y + height/2
+        border_rect = (border_x, border_y, 3500-border_size*2, 3500-border_size*2)
+        pygame.draw.rect(self.surface, (255, 0, 0), border_rect, border_size)
+        minimap_size = 200
+        pygame.draw.rect(self.minimap, (255, 255, 255), (0, 0, 3485, 3485), 30)
+        count = 0
+        for entity_id in list(self.entities.keys()):
+            if entity_id in self.entities:
+                entity = self.entities[entity_id]
+                if isinstance(entity, PlayerEntity):
+                    count += 1
+                    entity.draw_score(self.surface, count)
+                    if entity.hp > 0:
+                        color = (0, 0, 255)
+                        asset = self.assets['rocket_blue']
+                        if entity_id != self.entity_id:
+                            color = (255, 0, 0)
+                            asset = self.assets['rocket_red']
                         else:
-                            if entity_id == self.entity_id:
-                                text = self.BIG_FONT.render('YOU ARE DEAD', True, (255, 0, 0))
-                                text2 = self.FONT.render('Get ready to spawn...', True, (255, 255, 255))
-                                self.surface.blit(text, (640 - text.get_width() // 2, 240))
-                                self.surface.blit(text2, (640 - text2.get_width() // 2, 240 + text.get_height()))
+                            e = entity
+                            e.move = self.move
+                        entity.draw(self.surface, self.minimap, e, asset, color)
                     else:
-                        entity.draw(self.surface, e, self.entity_id)
-                    entity.update(delta_time, self.TARGET_FPS)
-            text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
-            self.surface.blit(text, (10, 675))
-            self.minimap.set_alpha(200)
-            self.surface.blit(pygame.transform.scale(self.minimap, (minimap_size, minimap_size)), (15, 15))
+                        if entity_id == self.entity_id:
+                            text = self.BIG_FONT.render('YOU ARE DEAD', True, (255, 0, 0))
+                            text2 = self.FONT.render('Get ready to spawn...', True, (255, 255, 255))
+                            self.surface.blit(text, (640 - text.get_width() // 2, 240))
+                            self.surface.blit(text2, (640 - text2.get_width() // 2, 240 + text.get_height()))
+                else:
+                    entity.draw(self.surface, e, self.entity_id)
+                entity.update(delta_time, self.TARGET_FPS)
+        text = self.FONT.render(f'({int(e.x)}, {int(e.y)})', True, (255, 255, 255))
+        self.surface.blit(text, (10, 675))
+        self.minimap.set_alpha(200)
+        self.surface.blit(pygame.transform.scale(self.minimap, (minimap_size, minimap_size)), (15, 15))
     
     def deserialize(self, data_full, remains):
         deserialized = {}
@@ -141,7 +134,7 @@ class Lobby:
             self.client.connect((hostname, port))
             self.id = self.client.recv(1024).decode()
             self.client.sendall(f'join-{name}'.encode())
-            self.entity_id = int(self.client.recv(1024).decode()[0])
+            self.entity_id = int(self.client.recv(1024).decode().split('|')[0])
             thread = Thread(target=self.get_thread)
             thread.daemon = True
             thread.start()
