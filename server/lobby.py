@@ -3,9 +3,12 @@ from entity.bullet import BulletEntity
 
 
 class Lobby:
+    count = 0
     TARGET_FPS = 144
+    MAX_PLAYERS = 6
 
     def __init__(self):
+        Lobby.count += 1
         self.players = []
         self.entity_count = 0
         self.entities = {}

@@ -11,7 +11,7 @@ from entity.bullet import BulletEntity
 class Server:
     def __init__(self):
         self.players = {}
-        self.lobbies = {0: Lobby()}
+        self.lobbies = {}
 
     def client_thread(self, client, player_id):
         try:
@@ -28,7 +28,9 @@ class Server:
                     event = i.split('-', 1)
                     if event[0] == 'join':
                         event[1] = event[1].split(',', 1)
-                        event[1][0] = int(event[1][0])
+                        if isinstance(event[1][0], int):
+                            event[1] = event[1][1]
+                        event[1] = ','.join(event[1])
                     elif event[0] == 'move':
                         event[1] = [bool(int(x)) for x in event[1].split(',')]
                     elif event[0] == 'shoot':
@@ -39,14 +41,14 @@ class Server:
                 for event, value in events.items():
                     if lobby_id == None:
                         if event == 'join':
-                            self.players[player_id].lobby_id = value[0]
-                            lobby = self.lobbies[value[0]]
-                            if len(value[1]) > 16: value[1] = value[1][:16]
+                            self.players[player_id].lobby_id = Lobby.count-1
+                            lobby = self.lobbies[Lobby.count-1]
+                            if len(value) > 16: value = value[:16]
                             self.players[player_id].entity_id = lobby.entity_count
-                            lobby.entities[lobby.entity_count] = PlayerEntity(value[1])
+                            lobby.entities[lobby.entity_count] = PlayerEntity(value)
                             lobby.players.append(player_id)
+                            reply = lobby.entity_count
                             lobby.entity_count += 1
-                            reply = lobby.entity_count - 1
                             Thread(target=self.client_send_thread, args=(client, player_id)).start()
                     else:
                         lobby = self.lobbies[lobby_id]
@@ -82,14 +84,19 @@ class Server:
             if client.fileno() != -1: client.sendall(lobby.serialize().encode())
 
     def lobby_thread(self, lobby_id):
+        self.lobbies[lobby_id] = Lobby()
         lobby = self.lobbies[lobby_id]
         clock = pygame.time.Clock()
-        fps = 60
         print('Lobby Running')
 
-        while 1:
+        while not lobby.players:
+            pass
+
+        while lobby.players:
             delta_time = clock.tick(60) / 1000
             lobby.update(delta_time)
+        
+        self.lobbies.pop(lobby_id)
 
     def listen_thread(self, port=7723):
         server = socket(AF_INET, SOCK_STREAM)
@@ -103,20 +110,27 @@ class Server:
         else:
             print("Server is online. (0.4.2-alpha)")
 
-            lobby = Thread(target=self.lobby_thread, args=(0,))
-            lobby.daemon = True
-            lobby.start()
+            t = Thread(target=self.lobby_thread, args=(0,))
+            t.daemon = True
+            t.start()
             while 1:
-                player_id = ServerPlayer.count
                 client, address = server.accept()
-                print(f"Connect | {address[0]}:{address[1]}")
+                lobby_id = Lobby.count
+                player_id = ServerPlayer.count
+                lobby = self.lobbies[lobby_id-1]
+                if len(lobby.players)+1 > Lobby.MAX_PLAYERS:
+                    print(lobby_id)
+                    lt = Thread(target=self.lobby_thread, args=(lobby_id,))
+                    lt.daemon = True
+                    lt.start()
+                print(f"Connect | Player {player_id} - {address[0]}:{address[1]}")
                 self.players[player_id] = ServerPlayer(client)
-                thread = Thread(
+                pt = Thread(
                     target=self.client_thread,
                     args=(client, player_id)
                 )
-                thread.daemon = True
-                thread.start()
+                pt.daemon = True
+                pt.start()
             server.close()
 
 
