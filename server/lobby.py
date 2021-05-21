@@ -15,23 +15,17 @@ class Lobby:
     
     def update(self, delta_time):
         ids = set()
-        for eid in list(self.entities.keys()):
-            try:
-                entity = self.entities[eid]
-            except Exception:
-                pass
-            else:
+        for entity_id in list(self.entities.keys()):
+            if entity_id in self.entities:
+                entity = self.entities[entity_id]
                 if isinstance(entity, BulletEntity):
                     if entity.is_out_of_bounds():
-                        ids.add(eid)
+                        ids.add(entity_id)
                     if entity.get_distance(entity.original_shooter) > 1600:
-                        ids.add(eid)
-                    for oid in list(self.entities.keys()):
-                        try:
-                            other = self.entities[oid]
-                        except Exception:
-                            pass
-                        else:
+                        ids.add(entity_id)
+                    for other_id in list(self.entities.keys()):
+                        if other_id in self.entities:
+                            other = self.entities[other_id]
                             if entity != other:
                                 distance = entity.get_distance(other)
                                 if distance != -1:
@@ -40,21 +34,18 @@ class Lobby:
                                             if distance < entity.RADIUS+other.RADIUS:
                                                 other.hp -= 1
                                                 if other.hp >= 0:
-                                                    ids.add(eid)
+                                                    ids.add(entity_id)
                                                 if other.hp == 0:
                                                     entity.shooter.score += 1
                                         elif isinstance(other, BulletEntity):
                                             if distance < entity.RADIUS+other.RADIUS:
-                                                if oid not in ids:
-                                                    ids.add(eid)
-                                                    ids.add(oid)
+                                                if other_id not in ids:
+                                                    ids.add(entity_id)
+                                                    ids.add(other_id)
                 else:
-                    for oid in list(self.entities.keys()):
-                        try:
-                            other = self.entities[oid]
-                        except Exception:
-                            pass
-                        else:
+                    for other_id in list(self.entities.keys()):
+                        if other_id in self.entities:
+                            other = self.entities[other_id]
                             if entity != other:
                                 distance = entity.get_distance(other)
                                 if distance != -1:

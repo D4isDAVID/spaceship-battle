@@ -78,7 +78,7 @@ class Server:
         clock = pygame.time.Clock()
 
         while lobby.entities:
-            clock.tick(15)
+            clock.tick(40)
             try:
                 if client.fileno() == -1: break
                 client.sendall(lobby.serialize().encode())
