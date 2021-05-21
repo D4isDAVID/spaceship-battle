@@ -1,5 +1,4 @@
 import math
-import sys
 import pygame
 import os
 from socket import socket, AF_INET, SOCK_STREAM
@@ -38,7 +37,6 @@ class Lobby:
         except KeyError:
             pass
         else:
-            e.move = self.move
             self.background.update(delta_time, self.TARGET_FPS)
             self.background.draw(self.surface, e)
             width, height = self.surface.get_size()
@@ -65,6 +63,9 @@ class Lobby:
                             if entity_id != self.entity_id:
                                 color = (255, 0, 0)
                                 asset = self.assets['rocket_red']
+                            else:
+                                e = entity
+                                e.move = self.move
                             entity.draw(self.surface, self.minimap, e, asset, color)
                         else:
                             if entity_id == self.entity_id:
@@ -118,15 +119,13 @@ class Lobby:
                     )
 
             self.entities = deserialized
-        if len(data_list) > 1:
-            return ''
         return data_list[-1]
 
     def get_thread(self):
         remains = ''
         while 1:
             try:
-                reply = self.client.recv(6144)
+                reply = self.client.recv(8196)
                 remains = self.deserialize(reply.decode(), remains)
                 if remains:
                     print(remains)
