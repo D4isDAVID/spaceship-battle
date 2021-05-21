@@ -120,7 +120,7 @@ class Server:
                     lt.daemon = True
                     lt.start()
                 print(f"Connect | Player {player_id} - {address[0]}:{address[1]}")
-                self.players[player_id] = ServerPlayer(client)
+                self.players[player_id] = ServerPlayer()
                 pt = Thread(
                     target=self.client_thread,
                     args=(client, player_id)

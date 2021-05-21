@@ -1,7 +1,7 @@
 # pygame
 pygame==2.0.1
 
-# pyinstaller (building binary/executable/app)
+# pyinstaller
 altgraph==0.17
 future==0.18.2
 pefile==2021.5.13

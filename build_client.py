@@ -9,6 +9,5 @@ PyInstaller.__main__.run([
     os.path.join(path, 'client', 'client.py'),
     '--onefile',
     f'-p={site.getsitepackages()}',
-    '--hidden-import=entity.bullet',
     f'--add-data={os.path.join(path, "client", "assets")}{add_data_sep}assets',
 ])
