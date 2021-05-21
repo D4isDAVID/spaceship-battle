@@ -35,14 +35,16 @@ class Server:
                 for event, value in events.items():
                     if lobby_id == None:
                         if event == 'join':
-                            self.players[player_id].lobby_id = Lobby.count-1
-                            lobby = self.lobbies[Lobby.count-1]
-                            if len(value) > 16: value = value[:16]
-                            self.players[player_id].entity_id = lobby.entity_count
-                            lobby.entities[lobby.entity_count] = PlayerEntity(value)
-                            lobby.players += 1
+                            lobby_id = Lobby.count-1
+                            self.players[player_id].lobby_id = lobby_id
+                            lobby = self.lobbies[lobby_id]
+                            entity_id = lobby.entity_count
+                            self.players[player_id].entity_id = entity_id
+                            lobby.entities[entity_id] = PlayerEntity(value[:16])
                             Thread(target=self.client_send_thread, args=(client, player_id)).start()
+                            lobby.players += 1
                             lobby.entity_count += 1
+                            print(entity_id)
                     else:
                         lobby = self.lobbies[lobby_id]
                         entity_id = self.players[player_id].entity_id
@@ -73,12 +75,15 @@ class Server:
     def client_send_thread(self, client, player_id):
         client.sendall(str(self.players[player_id].entity_id).encode())
         lobby = self.lobbies[self.players[player_id].lobby_id]
+        clock = pygame.time.Clock()
 
         while lobby.entities:
+            clock.tick(15)
             try:
+                if client.fileno() == -1: break
                 client.sendall(lobby.serialize().encode())
-            except ConnectionError:
-                break
+            except (ConnectionError, OSError):
+                continue
 
     def lobby_thread(self, lobby_id):
         self.lobbies[lobby_id] = Lobby()
@@ -137,4 +142,3 @@ if __name__ == '__main__':
         if command == 'stop':
             pygame.quit()
             sys.exit()
-import pygame
