@@ -9,7 +9,7 @@ class Lobby:
 
     def __init__(self):
         Lobby.count += 1
-        self.players = []
+        self.players = 0
         self.entity_count = 0
         self.entities = {}
     
