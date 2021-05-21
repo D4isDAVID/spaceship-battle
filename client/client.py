@@ -141,7 +141,7 @@ class Lobby:
             clock = pygame.time.Clock()
             self.client.connect((hostname, port))
             self.id = self.client.recv(1024).decode()
-            self.client.sendall(f'join-0,{name}'.encode())
+            self.client.sendall(f'join-{name}'.encode())
             self.entity_id = int(self.client.recv(1024).decode()[0])
             thread = Thread(target=self.get_thread)
             thread.daemon = True
@@ -157,7 +157,7 @@ class Lobby:
                 delta_time = clock.tick(60) / 1000
                 self.draw(delta_time)
                 self.surface.blit(version_text, (1270-version_text.get_width(), 675))
-                fps_text = self.FONT.render(str(delta_time), True, (255, 255, 255))
+                fps_text = self.FONT.render(f'{int(clock.get_fps())} FPS', True, (255, 255, 255))
                 self.surface.blit(fps_text, (1270-fps_text.get_width(), 650))
                 pygame.display.update()
                 
