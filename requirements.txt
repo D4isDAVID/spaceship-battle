@@ -1,7 +1,10 @@
+# pygame
+pygame==2.0.1
+
+# pyinstaller (building binary/executable/app)
 altgraph==0.17
 future==0.18.2
 pefile==2021.5.13
-pygame==2.0.1
 pyinstaller==4.3
 pyinstaller-hooks-contrib==2021.1
 pywin32-ctypes==0.2.0

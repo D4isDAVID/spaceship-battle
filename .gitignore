@@ -1,5 +1,10 @@
+# virtualenv
 venv/
+
+# python binary cache
 __pycache__/
+
+# pyinstaller
 build/
 dist/
 *.spec
