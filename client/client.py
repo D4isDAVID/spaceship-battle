@@ -25,8 +25,12 @@ class Lobby:
         self.assets = {}
         path = os.path.dirname(os.path.realpath( __file__ ))
         self.assets['rocket_red'] = pygame.image.load(os.path.join(path, 'assets', 'rocket_red.png'))
+        self.assets['rocket2_red'] = pygame.image.load(os.path.join(path, 'assets', 'rocket2_red.png'))
+        self.assets['alien_red'] = pygame.image.load(os.path.join(path, 'assets', 'alien_red.png'))
+        self.assets['alien2_red'] = pygame.image.load(os.path.join(path, 'assets', 'alien2_red.png'))
         self.assets['rocket_blue'] = pygame.image.load(os.path.join(path, 'assets', 'rocket_blue.png'))
-        self.assets['theme'] = os.path.join(path, 'assets', 'theme.wav')
+        self.assets['theme'] = os.path.join(path, 'assets', 'theme.mp3')
+        self.enemy_assets = {0: 'rocket_red', 1: 'rocket2_red', 2: 'alien_red', 3: 'alien2_red'}
         self.client = socket(AF_INET, SOCK_STREAM)
     
     def draw(self, delta_time):
@@ -55,7 +59,7 @@ class Lobby:
                         asset = self.assets['rocket_blue']
                         if entity_id != self.entity_id:
                             color = (255, 0, 0)
-                            asset = self.assets['rocket_red']
+                            asset = self.assets[self.enemy_assets[entity_id%4]]
                         else:
                             e = entity
                             e.move = self.move
