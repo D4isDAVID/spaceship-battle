@@ -53,6 +53,8 @@ class Lobby:
                                         if other.hp > 0 and entity.hp > 0:
                                             entity.hp = 0
                                             other.hp = 0
+                                            entity.score -= 1
+                                            other.score -= 1
                 entity.update(delta_time, self.TARGET_FPS)
         if ids:
             for eid in ids:
