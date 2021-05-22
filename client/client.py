@@ -120,8 +120,6 @@ class Lobby:
             try:
                 reply = self.client.recv(8196)
                 remains = self.deserialize(reply.decode(), remains)
-                if remains:
-                    print(remains)
             except ValueError:
                 continue
             except Exception as e:
