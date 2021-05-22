@@ -26,7 +26,7 @@ class PlayerEntity:
         x = self.x - entity.x + width/2
         y = self.y - entity.y + height/2
         
-        asset_size = self.RADIUS*2 - 2
+        asset_size = self.RADIUS*2
         asset = pygame.transform.scale(asset, (asset_size, asset_size))
         asset = pygame.transform.rotate(asset, -90 - self.rotation)
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
