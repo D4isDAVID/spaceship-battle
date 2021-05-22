@@ -77,7 +77,7 @@ class Server:
         clock = pygame.time.Clock()
 
         while lobby.entities:
-            clock.tick(40)
+            clock.tick(30)
             try:
                 if client.fileno() == -1: break
                 client.sendall(lobby.serialize().encode())
@@ -119,7 +119,7 @@ class Server:
                     lt = Thread(target=self.lobby_thread, args=(lobby_id,))
                     lt.daemon = True
                     lt.start()
-                print(f"Connect | Player {player_id} - {address[0]}:{address[1]}")
+                print(f"Connect | Player {player_id}")
                 self.players[player_id] = ServerPlayer()
                 pt = Thread(
                     target=self.client_thread,
