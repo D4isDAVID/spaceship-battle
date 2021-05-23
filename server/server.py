@@ -109,7 +109,7 @@ class Server:
         except OSError as e:
             print(f"Exception | {e}")
         else:
-            print("Server is online. (0.4.2-alpha)")
+            print("Server is online. (0.4.3-alpha)")
 
             while 1:
                 client, address = server.accept()
