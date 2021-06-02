@@ -6,4 +6,6 @@ To play, you must open client/client.py or a binary/executable which you can get
 
 ### Building a Binary File/Executable
 Building a binary file/executable requires PyInstaller.
-To build a server or client, run `pyinstaller build_server.py` or `pyinstaller build_client.py`
+To build an executable, run:
+* `python build_server.py` to build the server
+* `python build_client.py` to build the client
