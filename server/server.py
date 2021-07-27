@@ -6,6 +6,7 @@ from lobby import Lobby
 from player import ServerPlayer
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
+VERSION = '0.4.4-alpha'
 
 
 class Server:
@@ -109,7 +110,7 @@ class Server:
         except OSError as e:
             print(f"Exception | {e}")
         else:
-            print("Server is online. (0.4.3-alpha)")
+            print(f"Server is online. ({VERSION})")
 
             while 1:
                 client, address = server.accept()
