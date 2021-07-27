@@ -15,7 +15,9 @@ class Lobby:
     TARGET_FPS = 144
 
     def __init__(self):
-        self.surface = pygame.display.set_mode((1280, 720))
+        self.resolution = [1280, 720]
+        self.window = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+        self.surface = pygame.Surface((1280, 720))
         self.minimap = pygame.Surface((3500, 3500))
         self.background = Background(1250, 1250, (0.1, -0.1))
         self.id = None
@@ -153,6 +155,9 @@ class Lobby:
                 self.surface.blit(version_text, (1270-version_text.get_width(), 675))
                 fps_text = self.FONT.render(f'{int(clock.get_fps())} FPS', True, (255, 255, 255))
                 self.surface.blit(fps_text, (1270-fps_text.get_width(), 650))
+                surface = pygame.transform.scale(self.surface, self.resolution)
+                res = pygame.display.get_window_size()
+                self.window.blit(surface, (res[0]/2-surface.get_width()/2, res[1]/2-surface.get_height()/2))
                 pygame.display.update()
                 
                 events = {}
@@ -193,6 +198,9 @@ class Lobby:
                         width, height = pygame.display.get_window_size()
                         pos = [pos[0]-width/2, pos[1]-height/2]
                         events['shoot'] = math.atan2(pos[1], pos[0]) / math.pi * 180
+                    elif event.type == pygame.VIDEORESIZE:
+                        self.resolution[1] = event.h
+                        self.resolution[0] = round(event.h / 0.5625)
 
                 serialized = ''
                 for event, value in events.items():
