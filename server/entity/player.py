@@ -60,7 +60,7 @@ class PlayerEntity:
             ]
             if self.move_time < 0: self.move_time += 0.01 * delta_time * target_fps
             if self.move_time > 0: self.move_time -= 0.01 * delta_time * target_fps
-            if (-0.01 < self.move_time) and (0.01 > self.move_time):
+            if (-0.03 < self.move_time) and (0.01 > self.move_time):
                 self.move_time = 0
             if self.move_time < -1: self.move_time = -1
             if self.move_time > 1: self.move_time = 1
