@@ -151,7 +151,8 @@ class Lobby:
             running = 1
 
             while running:
-                delta_time = clock.tick(60) / 1000
+                fps = 60 if pygame.key.get_focused() or pygame.mouse.get_focused() else 15
+                delta_time = clock.tick(fps) / 1000
                 self.draw(delta_time)
                 self.surface.blit(version_text, (1270-version_text.get_width(), 675))
                 fps_text = self.FONT.render(f'{int(clock.get_fps())} FPS', True, (255, 255, 255))
