@@ -220,6 +220,10 @@ class Lobby:
         except OSError as e:
             if e.errno == 11001 or e.errno == 10049:
                 print('Exception | Invalid IP')
+            elif e.errno == 10054:
+                print('Exception | Server Closed')
+            elif e.errno == 10061:
+                print("Exception | Couldn't connect to server")
             else:
                 print(f'Exception | {e}')
 
