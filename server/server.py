@@ -59,7 +59,7 @@ class Server:
             except ConnectionError:
                 break
             except Exception as e:
-                print(f"Exception | {e}")
+                print(f'Exception | {e}')
                 break
 
         try:
@@ -70,7 +70,7 @@ class Server:
             pass
         self.players.pop(player_id)
         client.close()
-        print(f"Disconnect | Player {player_id}")
+        print(f'Disconnect | Player {player_id}')
 
     def client_send_thread(self, client, player_id):
         client.sendall(str(self.players[player_id].entity_id).encode())
@@ -105,12 +105,12 @@ class Server:
 
         try:
             server.bind(('', port))
-            print(f"Server bound to 0.0.0.0:{port}")
+            print(f'Server bound to 0.0.0.0:{port}')
             server.listen(1)
         except OSError as e:
-            print(f"Exception | {e}")
+            print(f'Exception | {e}')
         else:
-            print(f"Server is online. ({VERSION})")
+            print(f'Server is online. ({VERSION})')
 
             while 1:
                 client, address = server.accept()
@@ -120,7 +120,7 @@ class Server:
                     lt = Thread(target=self.lobby_thread, args=(lobby_id,))
                     lt.daemon = True
                     lt.start()
-                print(f"Connect | Player {player_id}")
+                print(f'Connect | Player {player_id}')
                 self.players[player_id] = ServerPlayer()
                 pt = Thread(
                     target=self.client_thread,
