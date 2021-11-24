@@ -217,11 +217,23 @@ class Lobby:
 
                 if serialized: self.client.sendall(serialized.encode())
         except OSError as e:
-            print(f"Exception | {e}")
+            if e.errno == 11001 or e.errno == 10049:
+                print('Exception | Invalid IP')
+            else:
+                print(f'Exception | {e}')
 
 
 if __name__ == '__main__':
-    ip = input("Enter Server IP: ")
+    ip, *port = input("Enter Server IP (ip or ip:port): ").split(':')
+    if len(port) == 0:
+        port = 7723
+    else:
+        try:
+            port = int(port[0])
+        except ValueError:
+            print('Invalid Port')
+            exit()
+    print(f'Using the IP {ip}:{port}')
     name = input("Enter Desired Name: ")
     lobby = Lobby()
-    lobby.main(name, ip, 7723)
+    lobby.main(name, ip, port)
