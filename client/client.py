@@ -1,6 +1,7 @@
 import math
 import pygame
 import os
+import sys
 from socket import socket, AF_INET, SOCK_STREAM
 from threading import Thread
 from background import Background
@@ -224,16 +225,20 @@ class Lobby:
 
 
 if __name__ == '__main__':
-    ip, *port = input('Enter Server IP (ip or ip:port): ').split(':')
-    if len(port) == 0:
-        port = 7723
-    else:
-        try:
-            port = int(port[0])
-        except ValueError:
-            print('Invalid Port')
-            exit()
-    print(f'Using the IP {ip}:{port}')
-    name = input('Enter Desired Name: ')
-    lobby = Lobby()
-    lobby.main(name, ip, port)
+    try:
+        ip, *port = input('Enter Server IP (ip or ip:port): ').split(':')
+        if len(port) == 0:
+            port = 7723
+        else:
+            try:
+                port = int(port[0])
+            except ValueError:
+                print('Invalid Port')
+                exit()
+        print(f'Using the IP {ip}:{port}')
+        name = input('Enter Desired Name: ')
+        lobby = Lobby()
+        lobby.main(name, ip, port)
+    except KeyboardInterrupt:
+        pygame.quit()
+        sys.exit()

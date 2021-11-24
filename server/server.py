@@ -137,8 +137,11 @@ if __name__ == '__main__':
     thread.daemon = True
     thread.start()
     print("Type 'stop' to stop the server.")
-    while True:
-        command = input()
-        if command == 'stop':
-            pygame.quit()
-            sys.exit()
+    try:
+        while True:
+            command = input()
+            if command == 'stop':
+                raise KeyboardInterrupt
+    except KeyboardInterrupt:
+        pygame.quit()
+        sys.exit()
