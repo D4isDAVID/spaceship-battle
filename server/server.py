@@ -100,44 +100,62 @@ class Server:
         
         self.lobbies.pop(lobby_id)
 
-    def listen_thread(self, port=7723):
+    def listen(self, ip='', port=7723):
         server = socket(AF_INET, SOCK_STREAM)
 
         try:
-            server.bind(('', port))
-            print(f'Server bound to 0.0.0.0:{port}')
+            server.bind((ip, port))
+            if ip == '':
+                ip = '0.0.0.0'
+            print(f'Server bound to {ip}:{port}')
             server.listen(1)
         except OSError as e:
-            print(f'Exception | {e}')
+            if e.errno == 11001 or e.errno == 10049:
+                print('Exception | Invalid IP')
+                raise KeyboardInterrupt
+            else:
+                print(f'Exception | {e}')
         else:
-            print(f'Server is online. ({VERSION})')
+            thread = Thread(target=self.listen_thread, args=(server,))
+            thread.daemon = True
+            thread.start()
+    
+    def listen_thread(self, server):
+        print(f'Server is online. ({VERSION})')
 
-            while 1:
-                client, address = server.accept()
-                lobby_id = Lobby.count
-                player_id = ServerPlayer.count
-                if not self.lobbies or self.lobbies[lobby_id-1].players+1 > Lobby.MAX_PLAYERS:
-                    lt = Thread(target=self.lobby_thread, args=(lobby_id,))
-                    lt.daemon = True
-                    lt.start()
-                print(f'Connect | Player {player_id}')
-                self.players[player_id] = ServerPlayer()
-                pt = Thread(
-                    target=self.client_thread,
-                    args=(client, player_id)
-                )
-                pt.daemon = True
-                pt.start()
-            server.close()
+        while 1:
+            client, address = server.accept()
+            lobby_id = Lobby.count
+            player_id = ServerPlayer.count
+            if not self.lobbies or self.lobbies[lobby_id-1].players+1 > Lobby.MAX_PLAYERS:
+                lt = Thread(target=self.lobby_thread, args=(lobby_id,))
+                lt.daemon = True
+                lt.start()
+            print(f'Connect | Player {player_id}')
+            self.players[player_id] = ServerPlayer()
+            pt = Thread(
+                target=self.client_thread,
+                args=(client, player_id)
+            )
+            pt.daemon = True
+            pt.start()
+        server.close()
 
 
 if __name__ == '__main__':
-    server = Server()
-    thread = Thread(target=server.listen_thread)
-    thread.daemon = True
-    thread.start()
-    print("Type 'stop' to stop the server.")
     try:
+        ip = input('Enter Server IP (0.0.0.0): ')
+        port = input('Enter Server PORT (7723): ')
+        try:
+            port = int(port)
+        except ValueError:
+            if port != '':
+                print('Invalid Port')
+                sys.exit()
+            port = 7723
+        server = Server()
+        server.listen(ip, port)
+        print("Type 'stop' to stop the server.")
         while True:
             command = input()
             if command == 'stop':
