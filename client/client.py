@@ -217,7 +217,10 @@ class Lobby:
 
                 if serialized: self.client.sendall(serialized.encode())
         except OSError as e:
-            print(f"Exception | {e}")
+            if e.errno == 11001 or e.errno == 10049:
+                print('Exception | Invalid IP')
+            else:
+                print(f'Exception | {e}')
 
 
 if __name__ == '__main__':
