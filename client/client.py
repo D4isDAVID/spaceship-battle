@@ -234,7 +234,7 @@ if __name__ == '__main__':
                 port = int(port[0])
             except ValueError:
                 print('Invalid Port')
-                exit()
+                sys.exit()
         print(f'Using the IP {ip}:{port}')
         name = input('Enter Desired Name: ')
         lobby = Lobby()
