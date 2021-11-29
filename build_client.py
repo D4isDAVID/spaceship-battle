@@ -3,6 +3,7 @@ import site
 import PyInstaller.__main__
 
 
+# TODO: python 3.10 compatibility
 path = os.path.dirname(__file__)
 add_data_sep = ':' if os.path.sep == '/' else ';'
 PyInstaller.__main__.run([
