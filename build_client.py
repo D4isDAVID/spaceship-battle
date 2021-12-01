@@ -3,7 +3,6 @@ import site
 import PyInstaller.__main__
 
 
-# TODO: python 3.10 compatibility
 path = os.path.dirname(__file__)
 add_data_sep = ':' if os.path.sep == '/' else ';'
 PyInstaller.__main__.run([
@@ -11,4 +10,5 @@ PyInstaller.__main__.run([
     '--onefile',
     f'-p={site.getsitepackages()}',
     f'--add-data={os.path.join(path, "client", "assets")}{add_data_sep}assets',
+    '--collect-binaries=pygame',
 ])
