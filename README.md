@@ -15,15 +15,15 @@ To play, you must open either the client.py which is located in the client folde
 In order to play you'll need a server to join.
 
 ## Opening a Server
-It is possible to open your own server by, once again, openening either the server.py which is located in the server folder (inside of the source code), or the server executable which you can get by either [downloading one](https://github.com/D4isDAVID/Spaceship-Battle/releases) or building one yourself.
+It is possible to open your own server by, once again, opening either the server.py which is located in the server folder (inside of the source code), or the server executable which you can get by either [downloading one](https://github.com/D4isDAVID/Spaceship-Battle/releases) or building one yourself.
 
-When opening a server, you can either choose a custom IP:port or just stick with the default 0.0.0.0:7723.  
+When opening a server, you can either choose a custom IP:port or just stick with the default 0.0.0.0:7723.
 It's possible to play with people outside of your local network by using port forwarding.
 
 ### Server Lobbies
 Upon opening a server, a lobby will be created in that same server.
 
-Each lobby supports up to 6 players. When a 7th player joins while the lobby is full, a new lobby is created.  
+Each lobby supports up to 6 players. When a 7th player joins while the lobby is full, a new lobby is created.
 Upon everyone leaving a lobby, it is closed.
 
 ## Building an Executable
