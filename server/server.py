@@ -6,7 +6,7 @@ from lobby import Lobby
 from player import ServerPlayer
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
-VERSION = '0.4.5-alpha-SNAPSHOT'
+VERSION = '0.4.5-alpha'
 
 
 class Server:

@@ -8,7 +8,7 @@ from background import Background
 from entity.player import PlayerEntity
 from entity.bullet import BulletEntity
 pygame.init()
-VERSION = '0.4.5-alpha-SNAPSHOT'
+VERSION = '0.4.5-alpha'
 
 
 class Lobby:
