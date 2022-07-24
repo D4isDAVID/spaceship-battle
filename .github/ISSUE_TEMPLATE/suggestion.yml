@@ -1,0 +1,29 @@
+name: ⭐ Suggestion
+description: Suggest ideas, changes, or new features
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to submit a suggestion!
+        If you actually want to ask a question, please use the [Discussions](https://github.com/D4isDAVID/spaceship-battle/discussions) section.
+  - type: textarea
+    id: intro
+    attributes:
+      label: Introduction
+      description: Introduce us to your idea. Is it related to a problem within this project? Please describe.
+      placeholder: I'm always frustrated when [...]
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Ideal Solution or Implementation
+      description: How would you like this problem or idea to be fixed or implemented?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: What other solutions or ideas have you considered?

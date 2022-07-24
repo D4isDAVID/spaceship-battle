@@ -1,0 +1,64 @@
+name: 🐞 Bug Report
+description: Report unexpected behavior
+labels: [bug, unconfirmed]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to submit a bug report!
+        If you actually want to ask a question, please use the [Discussions](https://github.com/D4isDAVID/spaceship-battle/discussions) section.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Write a short summary of your bug report.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: What did you do to make this happen?
+      placeholder: |
+        1. Launch [...]
+        2. Do [...]
+        3. Then do [...]
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What was supposed to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Game version
+      description: which version of the game are you using?
+      placeholder: Alpha-v0.4.5
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      description: which version of Python are you using?
+      placeholder: 3.10.5
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: Which OS is the game running on?
+      placeholder: Windows 11
