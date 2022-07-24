@@ -1,10 +1,30 @@
-# virtualenv
-venv/
-
-# python binary cache
+# Python Byte-compiled / optimized / DLL files
 __pycache__/
 
-# pyinstaller
+# Packaging
 build/
 dist/
+
+# PyInstaller
 *.spec
+
+# Python Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Code Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS-related
+.DS_Store
+Thumbs.db
