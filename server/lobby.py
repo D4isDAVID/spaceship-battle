@@ -12,7 +12,7 @@ class Lobby:
         self.players = 0
         self.entity_count = 0
         self.entities = {}
-    
+
     def update(self, delta_time):
         ids = set()
         for entity_id in list(self.entities.keys()):
@@ -59,10 +59,10 @@ class Lobby:
         if ids:
             for eid in ids:
                 self.entities.pop(eid)
-    
+
     def serialize(self):
         serialized = ''
-        
+
         for entity_id in list(self.entities.keys()):
             try:
                 entity = self.entities[entity_id]

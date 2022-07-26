@@ -9,7 +9,7 @@ class BulletEntity:
         self.y = y
         self.velocity = velocity
         self.shooter_id = shooter_id
-    
+
     def draw(self, surface, entity, entity_id):
         width, height = surface.get_size()
         x = self.x - entity.x + width/2

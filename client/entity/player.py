@@ -25,7 +25,7 @@ class PlayerEntity:
         width, height = surface.get_size()
         x = self.x - entity.x + width/2
         y = self.y - entity.y + height/2
-        
+
         asset_size = self.RADIUS*2
         asset = pygame.transform.scale(asset, (asset_size, asset_size))
         asset = pygame.transform.rotate(asset, -90 - self.rotation)
@@ -45,7 +45,7 @@ class PlayerEntity:
         pygame.draw.circle(minimap, color,
                             (self.x, self.y),
                             self.RADIUS*2.5)
-    
+
     def draw_score(self, surface, y):
         text = self.FONT.render(f'{self.score} - {self.name}', True, (255, 255, 255))
         rect = pygame.Surface((text.get_width()+12, text.get_height()+4))

@@ -36,7 +36,7 @@ class Lobby:
         self.assets['theme'] = os.path.join(path, 'assets', 'theme.mp3')
         self.enemy_assets = {0: 'rocket_red', 1: 'rocket2_red', 2: 'alien_red', 3: 'alien2_red'}
         self.client = socket(AF_INET, SOCK_STREAM)
-    
+
     def draw(self, delta_time):
         self.surface.fill(0)
         self.minimap.fill(0)
@@ -81,7 +81,7 @@ class Lobby:
         self.surface.blit(text, (10, 675))
         self.minimap.set_alpha(200)
         self.surface.blit(pygame.transform.scale(self.minimap, (minimap_size, minimap_size)), (15, 15))
-    
+
     def deserialize(self, data_full, remains):
         deserialized = {}
         data_list = data_full.split('||')
@@ -162,7 +162,7 @@ class Lobby:
                 res = pygame.display.get_window_size()
                 self.window.blit(surface, (res[0]/2-surface.get_width()/2, res[1]/2-surface.get_height()/2))
                 pygame.display.update()
-                
+
                 events = {}
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:

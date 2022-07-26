@@ -22,7 +22,7 @@ class PlayerEntity:
         self.hp = 0
         self.spawning = False
         self.spawn()
-    
+
     def get_distance(self, other):
         if isinstance(other, PlayerEntity):
             if other != self:
@@ -30,7 +30,7 @@ class PlayerEntity:
                 dy = (other.y) - (self.y)
                 return math.sqrt(math.pow(dx,2)+math.pow(dy,2))
         return -1
-    
+
     def spawn_thread(self):
         self.spawning = True
         time.sleep(2.5)
@@ -40,12 +40,12 @@ class PlayerEntity:
         self.rotation = 270
         self.hp = self.MAX_HP
         self.spawning = False
-    
+
     def spawn(self):
         thread = Thread(target=self.spawn_thread)
         thread.daemon = True
         thread.start()
-    
+
     def update(self, delta_time, target_fps):
         if self.hp > 0:
             velocity = self.velocity
@@ -72,7 +72,7 @@ class PlayerEntity:
             if self.shoot_time < self.SHOT_COOLDOWN: self.shoot_time += 0.01 * delta_time * target_fps
         else:
             if self.spawning == False: self.spawn()
-    
+
     def validate_position(self):
         if self.y - self.RADIUS < 0: self.y = self.RADIUS
         elif self.y + self.RADIUS > 3500: self.y = 3500 - self.RADIUS

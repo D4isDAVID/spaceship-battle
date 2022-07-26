@@ -17,7 +17,7 @@ class Background:
         for x in range(3):
             for y in range(3):
                 self.surface.blit(asset, (self.width*(x), self.height*(y)))
-    
+
     def update(self, delta_time, target_fps):
         self.x -= self.velocity[0] * delta_time * target_fps
         self.y -= self.velocity[1] * delta_time * target_fps

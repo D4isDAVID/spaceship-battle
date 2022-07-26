@@ -97,7 +97,7 @@ class Server:
         while lobby.players:
             delta_time = clock.tick(60) / 1000
             lobby.update(delta_time)
-        
+
         self.lobbies.pop(lobby_id)
 
     def listen(self, ip='', port=7723):
@@ -119,7 +119,7 @@ class Server:
             thread = Thread(target=self.listen_thread, args=(server,))
             thread.daemon = True
             thread.start()
-    
+
     def listen_thread(self, server):
         print(f'Server is online. ({VERSION})')
 
