@@ -1,6 +1,6 @@
 ## Note
 
-Spaceship Battle was created for a programming festival. \
+Spaceship Battle was created for a [programming festival](https://youtu.be/6lAnvImfSwE). \
 Due to that, updates are unlikely to happen unless I decide to continue the project.
 
 [Issues](https://github.com/D4isDAVID/Spaceship-Battle/issues/) and [pull requests](https://github.com/D4isDAVID/Spaceship-Battle/pulls) are still much appreciated though! 🙂
