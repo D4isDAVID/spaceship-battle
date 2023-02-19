@@ -40,7 +40,7 @@ class Lobby:
     def draw(self, delta_time):
         self.surface.fill(0)
         self.minimap.fill(0)
-        e = self.entities.get(self.entity_id, PlayerEntity(1500, 1500, 270, 0, 0, 0, 0, ''))
+        e = self.entities.get(self.entity_id, PlayerEntity(1500, 1500, 270, 0, 0, 0, 0, '', self.assets['rocket_blue'], (0, 0, 255)))
         self.background.update(delta_time, self.TARGET_FPS)
         self.background.draw(self.surface, e)
         width, height = self.surface.get_size()
@@ -59,15 +59,10 @@ class Lobby:
                     count += 1
                     entity.draw_score(self.surface, count)
                     if entity.hp > 0:
-                        color = (0, 0, 255)
-                        asset = self.assets['rocket_blue']
-                        if entity_id != self.entity_id:
-                            color = (255, 0, 0)
-                            asset = self.assets[self.enemy_assets[entity_id%4]]
-                        else:
+                        if entity_id == self.entity_id:
                             e = entity
                             e.move = self.move
-                        entity.draw(self.surface, self.minimap, e, asset, color)
+                        entity.draw(self.surface, self.minimap, e)
                     else:
                         if entity_id == self.entity_id:
                             text = self.BIG_FONT.render('YOU ARE DEAD', True, (255, 0, 0))
@@ -100,6 +95,12 @@ class Lobby:
                     values = entity.split(',', 11)
                     move = (values[6], values[7], values[8], values[9], values[10])
                     move = tuple(bool(int(i)) for i in move)
+                    if entity_id == self.entity_id:
+                        asset = self.assets['rocket_blue']
+                        color = (0, 0, 255)
+                    else:
+                        asset = self.assets[self.enemy_assets[entity_id%4]]
+                        color = (255, 0, 0)
                     deserialized[entity_id] = PlayerEntity(
                         float(values[0]),
                         float(values[1]),
@@ -108,7 +109,9 @@ class Lobby:
                         int(values[4]),
                         float(values[5]),
                         move,
-                        values[11]
+                        values[11],
+                        asset,
+                        color
                     )
                 else:
                     values = entity.split(',')

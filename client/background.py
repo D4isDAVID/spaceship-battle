@@ -11,7 +11,7 @@ class Background:
         self.height = 720
         self.x = x - self.width/2
         self.y = y - self.height/2
-        self.asset = pygame.transform.scale(asset, (self.width, self.height))
+        self.asset = pygame.transform.smoothscale(asset, (self.width, self.height))
         self.velocity = velocity
         self.surface = pygame.Surface((self.width*3, self.height*3))
         for x in range(3):

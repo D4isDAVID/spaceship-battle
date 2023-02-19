@@ -7,7 +7,7 @@ class PlayerEntity:
     FONT = pygame.font.SysFont('Arial', 25)
     RADIUS = 33
 
-    def __init__(self, x, y, rotation, score, hp, move_time, move, name):
+    def __init__(self, x, y, rotation, score, hp, move_time, move, name, asset, color):
         self.x = x
         self.y = y
         self.rotation = rotation
@@ -16,33 +16,35 @@ class PlayerEntity:
         self.move = move
         self.move_time = move_time
         self.name = name
+        self.asset = asset
+        self.color = color
         self.velocity = [
             math.cos(self.rotation / 180 * math.pi) * 2.5,
             math.sin(self.rotation / 180 * math.pi) * 2.5
         ]
+        asset_size = self.RADIUS*2
+        self.asset = pygame.transform.scale(self.asset, (asset_size, asset_size))
 
-    def draw(self, surface, minimap, entity, asset, color):
+    def draw(self, surface, minimap, entity):
         width, height = surface.get_size()
         x = self.x - entity.x + width/2
         y = self.y - entity.y + height/2
 
-        asset_size = self.RADIUS*2
-        asset = pygame.transform.scale(asset, (asset_size, asset_size))
-        asset = pygame.transform.rotate(asset, -90 - self.rotation)
+        asset = pygame.transform.rotate(self.asset, -90 - self.rotation)
         rect = asset.get_rect(center=asset.get_rect(center=(x, y)).center)
 
         surface.blit(asset, rect)
-        text = self.FONT.render(self.name, True, color)
+        text = self.FONT.render(self.name, True, self.color)
         surface.blit(text, (
             x - text.get_width() // 2,
             y - text.get_height() - self.RADIUS * 1.2
         ))
-        text = self.FONT.render(f'{self.hp} HP', True, color)
+        text = self.FONT.render(f'{self.hp} HP', True, self.color)
         surface.blit(text, (
             x - text.get_width() // 2,
             y + self.RADIUS * 1.2
         ))
-        pygame.draw.circle(minimap, color,
+        pygame.draw.circle(minimap, self.color,
                             (self.x, self.y),
                             self.RADIUS*2.5)
 
